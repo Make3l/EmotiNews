@@ -1,0 +1,13 @@
+# Maven
+target/
+*.log
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Mac file
+.DS_Store
+
+# Private config
+src/main/resources/config.properties
