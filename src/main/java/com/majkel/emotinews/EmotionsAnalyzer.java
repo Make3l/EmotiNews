@@ -17,22 +17,25 @@ public class EmotionsAnalyzer {
 
     private final static HttpClient httpClient=HttpClient.newHttpClient();
 
-    public List<TextEmotion> parseText(List<String> news){
+    public List<TextEmotion> parseArticles(List<String> news){
         List<TextEmotion> emotionsList=null;
         Gson gson=new Gson();
+        //System.out.println("{\n"+"\"inputs\": "+gson.toJson(news)+"\n}");
         try{
             HttpRequest httpPost=HttpRequest.newBuilder()
                     .uri(new URI("https://api-inference.huggingface.co/models/cardiffnlp/twitter-roberta-base-sentiment"))
-                    .POST(HttpRequest.BodyPublishers.ofString("\"inputs\": "+gson.toJson(news)))
+                    .POST(HttpRequest.BodyPublishers.ofString("{\n"+"\"inputs\": "+gson.toJson(news)+"\n}"))
                     .header("Authorization",ConfigLoader.getValue("api.huggingface.emotions.analizer"))
+                    .header("Content-Type", "application/json")
                     .build();
             HttpResponse<String> stringHttpResponse=httpClient.send(httpPost, HttpResponse.BodyHandlers.ofString());
 
             if(stringHttpResponse.statusCode()!=200)
                 throw new ParsingNewsApiException("Received status code "+ stringHttpResponse.statusCode());
 
-            Type type=new TypeToken<List<TextEmotion>>(){}.getType();
-            emotionsList=gson.fromJson(stringHttpResponse.body(),type);
+            Type type = new TypeToken<List<List<TextEmotion>>>(){}.getType();
+            List<List<TextEmotion>> parsed = gson.fromJson(stringHttpResponse.body(), type);
+            emotionsList = parsed.get(0);
 
         }catch(URISyntaxException e){
             throw new RuntimeException("URISyntaxException ",e);
