@@ -31,7 +31,7 @@ public class NewsFetcher {
             System.out.println("Kod: "+response.getStatus());
 
         }catch(URISyntaxException e){
-            throw  new RuntimeException("URISyntaxException ",e);
+            throw new RuntimeException("URISyntaxException ",e);
         }catch (InterruptedException | IOException e){
             throw new NewsApiException("Error while calling NewsAPI",e);
         }
