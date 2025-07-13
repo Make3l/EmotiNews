@@ -1,4 +1,4 @@
-package com.majkel.emotinews;
+package com.majkel.emotinews.model;
 
 public class NewsArticle{
     private String author;
