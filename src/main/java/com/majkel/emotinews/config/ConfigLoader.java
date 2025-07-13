@@ -1,4 +1,4 @@
-package com.majkel.emotinews;
+package com.majkel.emotinews.config;
 
 import java.io.IOException;
 import java.io.InputStream;

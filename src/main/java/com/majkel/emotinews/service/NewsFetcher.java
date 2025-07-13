@@ -1,7 +1,10 @@
-package com.majkel.emotinews;
+package com.majkel.emotinews.service;
 
 import com.google.gson.Gson;
+import com.majkel.emotinews.model.NewsHolder;
+import com.majkel.emotinews.config.ConfigLoader;
 import com.majkel.emotinews.exception.NewsApiException;
+import com.majkel.emotinews.model.NewsArticle;
 
 import java.io.IOException;
 import java.net.URI;

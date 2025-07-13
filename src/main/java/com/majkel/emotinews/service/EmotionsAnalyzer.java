@@ -1,8 +1,10 @@
-package com.majkel.emotinews;
+package com.majkel.emotinews.service;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.majkel.emotinews.config.ConfigLoader;
 import com.majkel.emotinews.exception.ParsingNewsApiException;
+import com.majkel.emotinews.model.TextEmotion;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -25,7 +27,7 @@ public class EmotionsAnalyzer {
             HttpRequest httpPost=HttpRequest.newBuilder()
                     .uri(new URI("https://api-inference.huggingface.co/models/cardiffnlp/twitter-roberta-base-sentiment"))
                     .POST(HttpRequest.BodyPublishers.ofString("{\n"+"\"inputs\": "+gson.toJson(news)+"\n}"))
-                    .header("Authorization",ConfigLoader.getValue("api.huggingface.emotions.analizer"))
+                    .header("Authorization", ConfigLoader.getValue("api.huggingface.emotions.analizer"))
                     .header("Content-Type", "application/json")
                     .build();
             HttpResponse<String> stringHttpResponse=httpClient.send(httpPost, HttpResponse.BodyHandlers.ofString());
