@@ -1,4 +1,8 @@
-package com.majkel.emotinews;
+package com.majkel.emotinews.utils;
+
+import com.majkel.emotinews.model.NewsArticle;
+import com.majkel.emotinews.model.NewsWithEmotions;
+import com.majkel.emotinews.model.TextEmotion;
 
 import java.util.ArrayList;
 import java.util.List;

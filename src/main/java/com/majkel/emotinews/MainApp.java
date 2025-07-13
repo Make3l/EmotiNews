@@ -1,5 +1,12 @@
 package com.majkel.emotinews;
 
+import com.majkel.emotinews.model.NewsArticle;
+import com.majkel.emotinews.model.NewsWithEmotions;
+import com.majkel.emotinews.model.TextEmotion;
+import com.majkel.emotinews.service.EmotionsAnalyzer;
+import com.majkel.emotinews.service.NewsFetcher;
+import com.majkel.emotinews.utils.CollectionUtils;
+
 import java.util.List;
 
 public class MainApp {
@@ -12,7 +19,7 @@ public class MainApp {
             System.out.println(article+" ");
         }
          */
-        List<String>lSting=CollectionUtils.toStringList(articles);
+        List<String>lSting= CollectionUtils.toStringList(articles);
         System.out.println(lSting);
 
         EmotionsAnalyzer emotionsAnalyzer=new EmotionsAnalyzer();
