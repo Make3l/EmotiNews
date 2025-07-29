@@ -5,12 +5,12 @@
 <?import javafx.scene.control.TextField?>
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.majkel.emotinews.ui.controller.MainViewController"
-      spacing="11" alignment="TOP_CENTER" padding="20">
+      spacing="11" alignment="TOP_CENTER" >
     <HBox spacing="10" alignment="CENTER">
-            <Button text="All" onAction="#handleAll"/>
-            <Button text="Positive" onAction="#handlePositive"/>
-            <Button text="Negative" onAction="#handleNegative"/>
-            <Button text="Neutral" onAction="#handleNeutral"/>
+        <Button text="All" onAction="#handleAll"/>
+        <Button text="Positive" onAction="#handlePositive"/>
+        <Button text="Negative" onAction="#handleNegative"/>
+        <Button text="Neutral" onAction="#handleNeutral"/>
     </HBox>
 
     <HBox spacing="10" alignment="CENTER">
@@ -18,5 +18,5 @@
         <Button text="Search" onAction="#searchTopic"/>
     </HBox>
 
-    <ListView fx:id="listViewObj" prefHeight="600" prefWidth="400" VBox.vgrow="ALWAYS"/>
+    <ListView fx:id="listViewObj" prefWidth="400" VBox.vgrow="ALWAYS"/>
 </VBox>
