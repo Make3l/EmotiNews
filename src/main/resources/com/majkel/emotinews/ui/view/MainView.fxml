@@ -3,37 +3,33 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
-
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.Hyperlink?>
+
 <HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.majkel.emotinews.ui.controller.MainViewController"
-      spacing="11" alignment="TOP_LEFT" >
-    <VBox spacing="11" alignment="TOP_CENTER">
-        <HBox spacing="10" alignment="CENTER">
-            <Button text="All" onAction="#handleAll"/>
-            <Button text="Positive" onAction="#handlePositive"/>
-            <Button text="Negative" onAction="#handleNegative"/>
-            <Button text="Neutral" onAction="#handleNeutral"/>
+      spacing="11" alignment="TOP_LEFT" stylesheets="@../style/style.css" >
+
+    <VBox spacing="11" alignment="TOP_CENTER" styleClass="left-panel">
+        <HBox spacing="10" alignment="CENTER" styleClass="filter-box">
+            <Button text="All" onAction="#handleAll" styleClass="filter-button"/>
+            <Button text="Positive" onAction="#handlePositive" styleClass="filter-button"/>
+            <Button text="Negative" onAction="#handleNegative" styleClass="filter-button"/>
+            <Button text="Neutral" onAction="#handleNeutral" styleClass="filter-button"/>
         </HBox>
 
         <HBox spacing="10" alignment="CENTER">
-            <TextField fx:id="topicField" promptText="Enter topic..." prefWidth="300"/>
-            <Button text="Search" onAction="#searchTopic"/>
+            <TextField fx:id="topicField" promptText="Enter topic..." prefWidth="300" styleClass="topic-field"/>
+            <Button text="Search" onAction="#searchTopic" styleClass="search-button"/>
         </HBox>
 
-        <ListView fx:id="listViewObj" prefWidth="400" VBox.vgrow="ALWAYS"/>
+        <ListView fx:id="listViewObj" prefWidth="400" styleClass="article-list"/>
     </VBox>
-    <VBox fx:id="detailedBox" spacing="10" visible="false" managed="false" prefWidth="400">
-        <Label fx:id="title" style="-fx-font-size: 16px; -fx-font-weight: bold;" wrapText="true"/>
 
-        <!-- Lepsze wyświetlanie opisu: TextArea lub TextFlow -->
-        <TextArea fx:id="descryption" editable="false" wrapText="true"
-                  prefRowCount="10" prefWidth="380" maxWidth="Infinity"
-                  style="-fx-font-size: 14px;"/>
-
-        <Hyperlink fx:id="link" text="Click to read more"/>
+    <VBox fx:id="detailedBox" visible="false" managed="false" spacing="10" styleClass="details-box">
+        <Label fx:id="title" styleClass="news-title"/>
+        <TextArea fx:id="descryption" editable="false" wrapText="true" prefRowCount="10" styleClass="news-description"/>
+        <Hyperlink fx:id="link" text="Click to read more" styleClass="news-link"/>
     </VBox>
 </HBox>
