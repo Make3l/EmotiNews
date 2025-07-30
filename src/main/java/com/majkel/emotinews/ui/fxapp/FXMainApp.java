@@ -1,5 +1,6 @@
 package com.majkel.emotinews.ui.fxapp;
 
+import com.majkel.emotinews.ui.controller.MainViewController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -11,6 +12,10 @@ public class FXMainApp extends Application {
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/majkel/emotinews/ui/view/MainView.fxml"));
         Scene scene = new Scene(loader.load());
+
+        MainViewController controller = loader.getController();
+        controller.setHostServices(getHostServices());
+
         primaryStage.setTitle("EmotiNews");
         primaryStage.setScene(scene);
         primaryStage.show();
