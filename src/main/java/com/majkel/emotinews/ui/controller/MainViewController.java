@@ -33,7 +33,7 @@ public class MainViewController {
     private Label title;
 
     @FXML
-    private TextArea descryption;
+    private Text description;
 
     @FXML
     private VBox detailedBox;
@@ -61,7 +61,7 @@ public class MainViewController {
             {
                 if(selected==lastSelectedArticle){
                     title.setText("");
-                    descryption.setText("");
+                    description.setText("");
                     detailedBox.setVisible(false);
                     detailedBox.setManaged(false);
                     lastSelectedArticle=null;
@@ -70,7 +70,7 @@ public class MainViewController {
                     detailedBox.setVisible(true);
                     detailedBox.setManaged(true);
                     title.setText(selected.getTitle());
-                    descryption.setText(selected.getDescription());
+                    description.setText(selected.getDescription());
                     link.setOnAction(event->hostServices.showDocument(selected.getUrl()));
                     lastSelectedArticle=selected;
                 }
