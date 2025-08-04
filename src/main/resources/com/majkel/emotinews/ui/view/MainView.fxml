@@ -1,35 +1,30 @@
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.Hyperlink?>
+<?xml version="1.0" encoding="UTF-8"?>
 
-<HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.majkel.emotinews.ui.controller.MainViewController"
-      spacing="11" alignment="TOP_LEFT" stylesheets="@../style/style.css" >
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-    <VBox spacing="11" alignment="TOP_CENTER" styleClass="left-panel">
-        <HBox spacing="10" alignment="CENTER" styleClass="filter-box">
-            <Button text="All" onAction="#handleAll" styleClass="filter-button"/>
-            <Button text="Positive" onAction="#handlePositive" styleClass="filter-button"/>
-            <Button text="Negative" onAction="#handleNegative" styleClass="filter-button"/>
-            <Button text="Neutral" onAction="#handleNeutral" styleClass="filter-button"/>
+<?import javafx.scene.text.Text?>
+<HBox alignment="TOP_LEFT" prefWidth="600" spacing="11" stylesheets="@../style/style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.majkel.emotinews.ui.controller.MainViewController">
+
+    <VBox alignment="CENTER" spacing="11" styleClass="left-panel" HBox.hgrow="ALWAYS">
+        <HBox alignment="CENTER" spacing="10" styleClass="filter-box">
+            <Button onAction="#handleAll" styleClass="filter-button" text="All" />
+            <Button onAction="#handlePositive" styleClass="filter-button" text="Positive" />
+            <Button onAction="#handleNegative" styleClass="filter-button" text="Negative" />
+            <Button onAction="#handleNeutral" styleClass="filter-button" text="Neutral" />
         </HBox>
 
-        <HBox spacing="10" alignment="CENTER">
-            <TextField fx:id="topicField" promptText="Enter topic..." prefWidth="300" styleClass="topic-field"/>
-            <Button text="Search" onAction="#searchTopic" styleClass="search-button"/>
+        <HBox alignment="CENTER" spacing="10">
+            <TextField fx:id="topicField" prefWidth="300" promptText="Enter topic..." styleClass="topic-field" />
+            <Button onAction="#searchTopic" styleClass="search-button" text="Search" />
         </HBox>
 
-        <ListView fx:id="listViewObj" prefWidth="400" styleClass="article-list"/>
+        <ListView fx:id="listViewObj" prefWidth="400" styleClass="article-list" />
     </VBox>
 
-    <VBox fx:id="detailedBox" visible="false" managed="false" spacing="10" styleClass="details-box">
-        <Label fx:id="title" styleClass="news-title"/>
-        <TextArea fx:id="descryption" editable="false" wrapText="true" prefRowCount="10" styleClass="news-description"/>
-        <Hyperlink fx:id="link" text="Click to read more" styleClass="news-link"/>
+    <VBox fx:id="detailedBox" managed="false" spacing="10" styleClass="details-box" visible="false">
+        <Label fx:id="title" maxWidth="-Infinity" styleClass="news-title" wrapText="true" />
+        <Text fx:id="description" wrappingWidth="330" styleClass="news-description" />
+        <Hyperlink fx:id="link" styleClass="news-link" text="Click to read more" />
     </VBox>
 </HBox>
