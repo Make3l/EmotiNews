@@ -11,8 +11,10 @@ import java.util.List;
 public class NewsPipeline {
     public static List<NewsWithEmotions> loadNews(String tag){
         NewsFetcher newsFetcher=new NewsFetcher();
-        List<NewsArticle>articles = newsFetcher.getNewsList("top-headlines?q="+tag);
-        if(articles.size()>15) articles.subList(15,articles.size()).clear();
+        LocalDate localDate=LocalDate.now();
+        List<NewsArticle>articles = newsFetcher.getNewsList("everything?q="+tag+"&from="+localDate.minusDays(2)+"&sortBy=popularity");
+        System.out.println("everything?q="+tag+"&from="+localDate.minusDays(2)+"&sortBy=popularity");
+        if(articles.size()>20) articles.subList(20,articles.size()).clear();
         List<String>lSting= CollectionUtils.toStringList(articles);
 
         EmotionsAnalyzer emotionsAnalyzer=new EmotionsAnalyzer();
@@ -24,8 +26,8 @@ public class NewsPipeline {
 
     public static List<NewsWithEmotions> loadNews(){
         NewsFetcher newsFetcher=new NewsFetcher();
-        List<NewsArticle>articles = newsFetcher.getNewsList("everything?q=technology&from="+LocalDate.now().minusDays(2));
-        if(articles.size()>15) articles.subList(15,articles.size()).clear();
+        List<NewsArticle>articles = newsFetcher.getNewsList("everything?q=technology&from="+LocalDate.now().minusDays(4));
+        if(articles.size()>20) articles.subList(20,articles.size()).clear();
         List<String>lSting= CollectionUtils.toStringList(articles);
 
         EmotionsAnalyzer emotionsAnalyzer=new EmotionsAnalyzer();
