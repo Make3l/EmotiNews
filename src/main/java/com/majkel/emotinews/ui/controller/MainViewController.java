@@ -3,6 +3,7 @@ package com.majkel.emotinews.ui.controller;
 import com.majkel.emotinews.model.NewsArticle;
 import com.majkel.emotinews.model.NewsWithEmotions;
 import com.majkel.emotinews.service.NewsPipeline;
+import javafx.animation.PauseTransition;
 import javafx.application.HostServices;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.util.List;
 
@@ -37,6 +39,9 @@ public class MainViewController {
 
     @FXML
     private VBox detailedBox;
+
+    @FXML
+    private Button searchButton;
 
 
     @FXML
@@ -108,6 +113,18 @@ public class MainViewController {
     public void searchTopic(){
         if(topicField.getText().isEmpty())
             return;
+
+        searchButton.setDisable(true);
+        searchButton.getStyleClass().removeAll("search-button","cooldown-button");
+        searchButton.getStyleClass().add("cooldown-button");
+        PauseTransition pauseTransition=new PauseTransition(Duration.seconds(4));
+        pauseTransition.setOnFinished(e->{
+            searchButton.setDisable(false);
+            searchButton.getStyleClass().removeAll("search-button","cooldown-button");
+            searchButton.getStyleClass().add("search-button");
+        });
+        pauseTransition.play();
+
         allNews=NewsPipeline.loadNews(topicField.getText());
         display(allNews);
         topicField.clear();
