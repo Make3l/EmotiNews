@@ -14,6 +14,7 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class MainViewController {
     @FXML
@@ -43,6 +44,8 @@ public class MainViewController {
     @FXML
     private Button searchButton;
 
+
+    private Consumer<List<NewsWithEmotions>> chartArticles;
 
     @FXML
     private void initialize(){
@@ -81,6 +84,7 @@ public class MainViewController {
                 }
             }
         });
+        //chartArticles.accept(allNews);
     }
 
 
@@ -90,6 +94,10 @@ public class MainViewController {
             items.add(n.getArticle());
         }
         listViewObj.setItems(items);
+    }
+
+    public void setChartArticles(Consumer<List<NewsWithEmotions>> articles){
+        this.chartArticles=articles;
     }
 
     @FXML
@@ -126,6 +134,7 @@ public class MainViewController {
         pauseTransition.play();
 
         allNews=NewsPipeline.loadNews(topicField.getText());
+        chartArticles.accept(allNews);
         display(allNews);
         topicField.clear();
     }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane stylesheets="@../style/chartStyle.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.majkel.emotinews.ui.controller.ChartController">
+
+    <PieChart fx:id="emotionChart" layoutX="14" layoutY="14" prefHeight="414.0" prefWidth="414.0" title="Emotions Chart" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+
+</AnchorPane>
