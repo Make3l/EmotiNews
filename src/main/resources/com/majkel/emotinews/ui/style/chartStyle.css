@@ -9,3 +9,10 @@
 .chart-pie.data2 {
     -fx-pie-color: #F44336; /* negative */
 }
+
+.chart-topic-label {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.1), 1, 0.0, 0, 1);
+}

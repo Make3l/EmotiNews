@@ -1,5 +1,6 @@
 package com.majkel.emotinews.ui.controller;
 
+import com.majkel.emotinews.model.Callback;
 import com.majkel.emotinews.model.NewsWithEmotions;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
@@ -7,13 +8,22 @@ import javafx.scene.chart.PieChart;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import javafx.scene.control.Label;
 
 public class ChartController {
     @FXML
     private PieChart emotionChart;
 
+    @FXML
+    private Label chartLabel;
 
-    public void updateChart(List<NewsWithEmotions> news){
+
+    public void updateChart(Callback callback){
+        List<NewsWithEmotions> news=callback.getNews();
+        if(callback.getTopic()==null || callback.getTopic().isEmpty())
+            return;
+        chartLabel.setText("Topic: "+callback.getTopic());
+
         emotionChart.getData().clear();
 
         if(news==null || news.isEmpty())

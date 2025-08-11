@@ -1,10 +1,12 @@
 package com.majkel.emotinews.ui.controller;
 
+import com.majkel.emotinews.model.Callback;
 import com.majkel.emotinews.model.NewsArticle;
 import com.majkel.emotinews.model.NewsWithEmotions;
 import com.majkel.emotinews.service.NewsPipeline;
 import javafx.animation.PauseTransition;
 import javafx.application.HostServices;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -44,8 +46,9 @@ public class MainViewController {
     @FXML
     private Button searchButton;
 
+    private String currentTopic="technology";//current topic, default=technology
 
-    private Consumer<List<NewsWithEmotions>> chartArticles;
+    private Consumer<Callback> callbackConsumer;
 
     @FXML
     private void initialize(){
@@ -84,7 +87,10 @@ public class MainViewController {
                 }
             }
         });
-        //chartArticles.accept(allNews);
+
+        Platform.runLater(()->{
+            callbackConsumer.accept(new Callback(currentTopic,allNews));
+        });
     }
 
 
@@ -96,8 +102,8 @@ public class MainViewController {
         listViewObj.setItems(items);
     }
 
-    public void setChartArticles(Consumer<List<NewsWithEmotions>> articles){
-        this.chartArticles=articles;
+    public void setCallbackConsumer(Consumer<Callback> callback){
+        this.callbackConsumer=callback;
     }
 
     @FXML
@@ -134,7 +140,8 @@ public class MainViewController {
         pauseTransition.play();
 
         allNews=NewsPipeline.loadNews(topicField.getText());
-        chartArticles.accept(allNews);
+        currentTopic=topicField.getText();
+        callbackConsumer.accept(new Callback(currentTopic,allNews));
         display(allNews);
         topicField.clear();
     }
