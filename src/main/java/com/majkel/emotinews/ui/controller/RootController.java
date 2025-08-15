@@ -1,7 +1,6 @@
 package com.majkel.emotinews.ui.controller;
 
 import javafx.application.HostServices;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,16 +14,13 @@ public class RootController {
     @FXML
     private TabPane rootTabPane;
 
-    private HostServices hostServices;
-
     private MainViewController mainViewController;
     private ChartController chartViewController;
 
 
-    public void setHostServicies(HostServices hostServices){
-        if(hostServices!=null )
-            this.hostServices=hostServices;
-
+    public void setHostServices(HostServices hostServices){
+        if(mainViewController!=null && hostServices!=null )
+            mainViewController.setHostServices(hostServices);
     }
 
     @FXML
@@ -35,8 +31,6 @@ public class RootController {
             FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/com/majkel/emotinews/ui/view/MainView.fxml"));
             Parent mainRoot = mainLoader.load();
             mainViewController = mainLoader.getController();
-            if(mainViewController!=null)
-                mainViewController.setHostServices(hostServices);
 
             // Loading ChartView
             FXMLLoader chartLoader = new FXMLLoader(getClass().getResource("/com/majkel/emotinews/ui/view/ChartView.fxml"));

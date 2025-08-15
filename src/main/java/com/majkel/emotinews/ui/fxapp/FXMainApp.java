@@ -1,6 +1,5 @@
 package com.majkel.emotinews.ui.fxapp;
 
-import com.majkel.emotinews.ui.controller.MainViewController;
 import com.majkel.emotinews.ui.controller.RootController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -15,7 +14,7 @@ public class FXMainApp extends Application {
         Scene scene = new Scene(loader.load());
 
         RootController rootController=loader.getController();
-        rootController.setHostServicies(getHostServices());
+        rootController.setHostServices(getHostServices());
 
         primaryStage.setTitle("EmotiNews");
         primaryStage.setScene(scene);
