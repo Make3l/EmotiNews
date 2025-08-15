@@ -19,6 +19,11 @@
     -fx-text-fill: white;
 }
 
+.cooldown-button {
+    -fx-background-color: #444;
+    -fx-text-fill: white;
+}
+
 .topic-field {
     -fx-font-size: 14px;
 }

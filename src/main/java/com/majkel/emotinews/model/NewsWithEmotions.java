@@ -13,4 +13,21 @@ public class NewsWithEmotions {
     public NewsArticle getArticle(){
         return article;
     }
+
+    public String changedEmotionName(){
+        switch (this.emotion){
+            case "LABEL_0" -> {
+                return "Negative";
+            }
+            case "LABEL_1"->{
+                return "Neutral";
+            }
+            case "LABEL_2"->{
+                return "Positive";
+            }
+        }
+        return "ERROR";
+    }
+
+
 }

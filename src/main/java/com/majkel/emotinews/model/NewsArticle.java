@@ -6,6 +6,7 @@ public class NewsArticle{
     private String description;
     private String url;
     private String publishedAt;
+    private String content;
 
     public String getPublishedAt() {
         return publishedAt;
@@ -43,6 +44,14 @@ public class NewsArticle{
         return author;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     public void setAuthor(String author) {
         this.author = author;
     }
@@ -52,4 +61,6 @@ public class NewsArticle{
         str.append(author).append(" ").append(title).append(" ").append(description);
         return str.toString();
     }
+
+
 }

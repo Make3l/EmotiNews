@@ -6,6 +6,7 @@ import com.majkel.emotinews.model.TextEmotion;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -31,6 +32,6 @@ public class CollectionUtils {
         return true;
     }
     public static List<NewsArticle> filterValidNews(List<NewsArticle> articles){
-        return articles.stream().filter(CollectionUtils::isValid).toList();
+        return articles.stream().filter(CollectionUtils::isValid).collect(Collectors.toCollection(ArrayList::new));
     }
 }

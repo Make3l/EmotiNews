@@ -1,0 +1,18 @@
+.chart-pie.data0 {
+    -fx-pie-color: #4CAF50; /* positive */
+}
+
+.chart-pie.data1 {
+    -fx-pie-color: #BAB5B5; /* neutral */
+}
+
+.chart-pie.data2 {
+    -fx-pie-color: #F44336; /* negative */
+}
+
+.chart-topic-label {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.1), 1, 0.0, 0, 1);
+}
