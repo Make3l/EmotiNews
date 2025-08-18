@@ -1,5 +1,7 @@
 package com.majkel.emotinews.model;
 
+import java.util.Objects;
+
 public class NewsWithEmotions {
     private final String emotion;
     private final NewsArticle article;
@@ -29,5 +31,16 @@ public class NewsWithEmotions {
         return "ERROR";
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof NewsWithEmotions that)) return false;
+        return article.equals(that.getArticle()) && emotion.equals(that.getEmotion());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(article,emotion);
+    }
 
 }
