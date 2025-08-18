@@ -1,5 +1,7 @@
 package com.majkel.emotinews.model;
 
+import java.util.Objects;
+
 public class NewsArticle{
     private String author;
     private String title;
@@ -61,6 +63,19 @@ public class NewsArticle{
         str.append(author).append(" ").append(title).append(" ").append(description);
         return str.toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof NewsArticle that)) return false;
+        return title.equals(that.getTitle()) && description.equals(that.getDescription()) && url.equals(that.url);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, description, url);
+    }
+
 
 
 }

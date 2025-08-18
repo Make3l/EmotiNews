@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.toList;
-
 public class CollectionUtils {
     public static List<String> toStringList(List<NewsArticle> articles){
         List<String> result=new ArrayList<>();
@@ -27,7 +25,9 @@ public class CollectionUtils {
     }
 
     private static boolean isValid(NewsArticle article){
-        if(article.getDescription()==null || article.getDescription().isBlank())
+        if(article.getDescription()==null || article.getDescription().isBlank() ||
+                article.getTitle()==null || article.getTitle().isBlank() ||
+                article.getUrl()==null || article.getUrl().isBlank())
             return false;
         return true;
     }
