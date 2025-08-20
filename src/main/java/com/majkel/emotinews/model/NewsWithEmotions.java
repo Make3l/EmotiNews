@@ -5,6 +5,7 @@ import java.util.Objects;
 public class NewsWithEmotions {
     private final String emotion;
     private final NewsArticle article;
+
     public NewsWithEmotions( String emotion, NewsArticle article){
         this.emotion=emotion;
         this.article=article;
@@ -30,6 +31,7 @@ public class NewsWithEmotions {
         }
         return "ERROR";
     }
+
 
     @Override
     public boolean equals(Object o) {

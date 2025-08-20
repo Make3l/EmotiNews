@@ -11,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
@@ -56,13 +57,40 @@ public class MainViewController {
         display(allNews);
 
         listViewObj.setCellFactory(param-> new ListCell<>(){
-                @Override
+            private final Button favouriteButton=new Button("☆");
+            private final Label titleLabel=new Label();
+            private final HBox content=new HBox(favouriteButton,titleLabel);
+
+            {
+                content.setSpacing(10);
+                favouriteButton.setStyle("-fx-font-size: 16px; -fx-background-color: transparent;");
+                favouriteButton.setOnMouseClicked(e->{
+                   NewsArticle selected=getItem();
+                   if(selected!=null){
+                       selected.changeFavourite();
+                       setButtonIcon(selected.isFavourite());
+                   }
+                });
+            }
+
+            @Override
                 protected void updateItem(NewsArticle item,boolean empty){
                     super.updateItem(item, empty);
                     if(empty || item==null)
+                    {
                         setText(null);
+                        setGraphic(null);
+                    }
                     else
-                        setText(item.getTitle());
+                    {
+                        setButtonIcon(item.isFavourite());
+                        titleLabel.setText(item.getTitle());
+                        setGraphic(content);
+                    }
+
+            }
+            private void setButtonIcon(boolean favourite){
+                    favouriteButton.setText(favourite? "★" : "☆");
             }
         });
 

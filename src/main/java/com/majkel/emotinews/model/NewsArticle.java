@@ -10,6 +10,8 @@ public class NewsArticle{
     private String publishedAt;
     private String content;
 
+    private boolean favourite=false;
+
     public String getPublishedAt() {
         return publishedAt;
     }
@@ -57,6 +59,15 @@ public class NewsArticle{
     public void setAuthor(String author) {
         this.author = author;
     }
+
+    public boolean isFavourite(){
+        return favourite;
+    }
+
+    public void changeFavourite(){
+        favourite=!favourite;
+    }
+
     @Override
     public String toString(){
         StringBuilder str=new StringBuilder();
