@@ -64,12 +64,14 @@ public class MainViewController {
             {
                 titleLabel.getStyleClass().add("news-title");
                 favouriteButton.getStyleClass().add("fav-button");
+                favouriteButton.setVisible(false);
                 content.getStyleClass().add("news-item");
                 favouriteButton.setOnMouseClicked(e->{
                    NewsArticle selected=getItem();
                    if(selected!=null){
                        selected.changeFavourite();
                        setButtonIcon(selected.isFavourite());
+
                    }
                 });
             }
@@ -87,6 +89,8 @@ public class MainViewController {
                         setButtonIcon(item.isFavourite());
                         titleLabel.setText(item.getTitle());
                         setGraphic(content);
+                        setOnMouseEntered(e->favouriteButton.setVisible(true));
+                        setOnMouseExited(e->favouriteButton.setVisible(false));
                     }
 
             }

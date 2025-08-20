@@ -97,7 +97,7 @@
 }
 
 .news-item {
-    -fx-spacing: 10;
+    -fx-spacing: 4;
     -fx-alignment: center-left;
     -fx-padding: 6 10;
 }
