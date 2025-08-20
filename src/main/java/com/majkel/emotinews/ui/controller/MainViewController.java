@@ -62,8 +62,9 @@ public class MainViewController {
             private final HBox content=new HBox(favouriteButton,titleLabel);
 
             {
-                content.setSpacing(10);
-                favouriteButton.setStyle("-fx-font-size: 16px; -fx-background-color: transparent;");
+                titleLabel.getStyleClass().add("news-title");
+                favouriteButton.getStyleClass().add("fav-button");
+                content.getStyleClass().add("news-item");
                 favouriteButton.setOnMouseClicked(e->{
                    NewsArticle selected=getItem();
                    if(selected!=null){
