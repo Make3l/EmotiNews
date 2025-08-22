@@ -1,6 +1,7 @@
 package com.majkel.emotinews.ui.controller;
 
 import com.majkel.emotinews.model.Callback;
+import com.majkel.emotinews.model.CallbackFav;
 import com.majkel.emotinews.model.NewsArticle;
 import com.majkel.emotinews.model.NewsWithEmotions;
 import com.majkel.emotinews.service.NewsPipeline;
@@ -21,13 +22,13 @@ import java.util.function.Consumer;
 
 public class MainViewController {
     @FXML
-    private ListView<NewsArticle> listViewObj;
+    private ListView<NewsWithEmotions> listViewObj;
 
     private List<NewsWithEmotions> allNews;
 
     private HostServices hostServices;
 
-    private NewsArticle lastSelectedArticle;
+    private NewsWithEmotions lastSelectedNews;
 
     @FXML
     private TextField topicField;
@@ -51,6 +52,8 @@ public class MainViewController {
 
     private Consumer<Callback> callbackConsumer;
 
+    private Consumer<CallbackFav> callbackFavNews;
+
     @FXML
     private void initialize(){
         allNews = NewsPipeline.loadNews();
@@ -67,17 +70,17 @@ public class MainViewController {
                 favouriteButton.setVisible(false);
                 content.getStyleClass().add("news-item");
                 favouriteButton.setOnMouseClicked(e->{
-                   NewsArticle selected=getItem();
+                   NewsWithEmotions selected=getItem();
                    if(selected!=null){
-                       selected.changeFavourite();
-                       setButtonIcon(selected.isFavourite());
-
+                       selected.getArticle().changeFavourite();
+                       setButtonIcon(selected.getArticle().isFavourite());
+                       callbackFavNews.accept(new CallbackFav(selected, selected.getArticle().isFavourite()));
                    }
                 });
             }
 
             @Override
-                protected void updateItem(NewsArticle item,boolean empty){
+                protected void updateItem(NewsWithEmotions item,boolean empty){
                     super.updateItem(item, empty);
                     if(empty || item==null)
                     {
@@ -86,8 +89,8 @@ public class MainViewController {
                     }
                     else
                     {
-                        setButtonIcon(item.isFavourite());
-                        titleLabel.setText(item.getTitle());
+                        setButtonIcon(item.getArticle().isFavourite());
+                        titleLabel.setText(item.getArticle().getTitle());
                         setGraphic(content);
                         setOnMouseEntered(e->favouriteButton.setVisible(true));
                         setOnMouseExited(e->favouriteButton.setVisible(false));
@@ -100,23 +103,24 @@ public class MainViewController {
         });
 
         listViewObj.setOnMouseClicked(e->{
-            NewsArticle selected=listViewObj.getSelectionModel().getSelectedItem();
+            NewsWithEmotions selected=listViewObj.getSelectionModel().getSelectedItem();
+            listViewObj.getSelectionModel().clearSelection();
             if(selected!=null)
             {
-                if(selected==lastSelectedArticle){
+                if(selected== lastSelectedNews){
                     title.setText("");
                     description.setText("");
                     detailedBox.setVisible(false);
                     detailedBox.setManaged(false);
-                    lastSelectedArticle=null;
+                    lastSelectedNews =null;
                 }
                 else{
                     detailedBox.setVisible(true);
                     detailedBox.setManaged(true);
-                    title.setText(selected.getTitle());
-                    description.setText(selected.getDescription());
-                    link.setOnAction(event->hostServices.showDocument(selected.getUrl()));
-                    lastSelectedArticle=selected;
+                    title.setText(selected.getArticle().getTitle());
+                    description.setText(selected.getArticle().getDescription());
+                    link.setOnAction(event->hostServices.showDocument(selected.getArticle().getUrl()));
+                    lastSelectedNews =selected;
                 }
             }
         });
@@ -128,15 +132,17 @@ public class MainViewController {
 
 
     private void display(List<NewsWithEmotions>news){
-        ObservableList<NewsArticle>items= FXCollections.observableArrayList();
-        for(NewsWithEmotions n: news){
-            items.add(n.getArticle());
-        }
+        ObservableList<NewsWithEmotions>items= FXCollections.observableArrayList();
+        items.addAll(news);
         listViewObj.setItems(items);
     }
 
     public void setCallbackConsumer(Consumer<Callback> callback){
         this.callbackConsumer=callback;
+    }
+
+    public void setCallbackFavNews(Consumer<CallbackFav> callbackFavNews){
+        this.callbackFavNews=callbackFavNews;
     }
 
     @FXML

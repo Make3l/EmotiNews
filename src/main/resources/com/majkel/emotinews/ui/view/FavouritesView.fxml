@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.majkel.emotinews.ui.controller.FavouritesController">
+
+    <Label alignment="CENTER" text="Favourite news" />
+    <HBox alignment="CENTER" spacing="10">
+        <Button onAction="#handleAll"  text="All" />
+        <Button onAction="#handlePositive"  text="Positive" />
+        <Button onAction="#handleNegative"  text="Negative" />
+        <Button onAction="#handleNeutral" text="Neutral" />
+    </HBox>
+
+    <ListView fx:id="favList" prefWidth="400"  />
+
+</VBox>

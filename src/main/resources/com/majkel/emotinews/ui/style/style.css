@@ -97,9 +97,9 @@
 }
 
 .news-item {
-    -fx-spacing: 4;
+    -fx-spacing: 2;
     -fx-alignment: center-left;
-    -fx-padding: 6 10;
+    -fx-padding: 2 2;
 }
 
 .article-list .fav-button:hover {

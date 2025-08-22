@@ -16,6 +16,7 @@ public class RootController {
 
     private MainViewController mainViewController;
     private ChartController chartViewController;
+    private FavouritesController favouritesController;
 
 
     public void setHostServices(HostServices hostServices){
@@ -37,12 +38,30 @@ public class RootController {
             Parent chartRoot = chartLoader.load();
             chartViewController = chartLoader.getController();
 
+
+            // Loading FavouritesView
+            FXMLLoader favLoader=new FXMLLoader(getClass().getResource("/com/majkel/emotinews/ui/view/FavouritesView.fxml"));
+            Parent favRoot=favLoader.load();
+            favouritesController=favLoader.getController();
+
+
+
             // Callback loading
             mainViewController.setCallbackConsumer(chartViewController::updateChart);
 
+            mainViewController.setCallbackFavNews(e->{
+                if(e.getAddDelete())
+                    favouritesController.addFavourite(e.getNews());
+                else
+                    favouritesController.removeFavourite(e.getNews());
+            });
+
+
+
             rootTabPane.getTabs().addAll(
                     new Tab("News", mainRoot),
-                    new Tab("Chart", chartRoot)
+                    new Tab("Chart", chartRoot),
+                    new Tab("Favourites",favRoot)
             );
 
         } catch (IOException e) {

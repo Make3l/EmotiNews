@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,7 +27,9 @@ public class JSONStorage {
 
     public static List<NewsWithEmotions> load(File file) throws IOException{
         if(!file.exists() || file.length()==0)
-            return List.of();
+            return new ArrayList<>();
+
+
 
         try(FileReader fileReader=new FileReader(file)){
             Type type=new TypeToken<List<NewsWithEmotions>>(){}.getType();
