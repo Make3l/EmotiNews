@@ -2,6 +2,7 @@ package com.majkel.emotinews.ui.controller;
 
 import com.majkel.emotinews.model.NewsWithEmotions;
 import com.majkel.emotinews.storage.JSONStorage;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -35,6 +36,23 @@ public class FavouritesController {
         favList.setItems(observableList);
 
         favList.setCellFactory(lv->new ListCell<NewsWithEmotions>(){
+            private Button deleteFavButton=new Button("★");
+            private Label newsTitle=new Label();
+            private HBox hBox=new HBox(deleteFavButton,newsTitle);
+            {
+                deleteFavButton.setVisible(false);
+                deleteFavButton.setOnMouseClicked(e->{
+                    NewsWithEmotions selected=getItem();
+                    if(selected!=null)
+                    {
+                        removeFavourite(selected);
+                        Platform.runLater(()->selected.getArticle().changeFavourite());
+                    }
+
+                });
+            }
+
+
             @Override
             protected void updateItem(NewsWithEmotions item, boolean empty){
                 super.updateItem(item,empty);
@@ -42,7 +60,11 @@ public class FavouritesController {
                     setText(null);
                     setGraphic(null);
                 }else{
-                    setText(item.getArticle().getTitle());
+                    newsTitle.setText(item.getArticle().getTitle());
+                    setGraphic(hBox);
+                    setOnMouseEntered(e->deleteFavButton.setVisible(true));
+                    setOnMouseExited(e->deleteFavButton.setVisible(false));
+                    //setText(item.getArticle().getTitle());
                 }
             }
         });
@@ -52,12 +74,10 @@ public class FavouritesController {
     public void addFavourite(NewsWithEmotions news){
         favAllList.add(news);
         observableList.add(news);
-        System.out.println("Dodano!!!");
     }
     public void removeFavourite(NewsWithEmotions news){
         favAllList.remove(news);
         observableList.remove(news);
-        System.out.println("Zabrano!!!");
     }
 
     private void display(List<NewsWithEmotions>newsToDisplay){

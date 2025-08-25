@@ -58,11 +58,15 @@ public class RootController {
 
 
 
-            rootTabPane.getTabs().addAll(
-                    new Tab("News", mainRoot),
-                    new Tab("Chart", chartRoot),
-                    new Tab("Favourites",favRoot)
-            );
+            Tab tabMain=new Tab("News", mainRoot);
+            Tab tabChart=new Tab("Chart", chartRoot);
+            Tab tabFavourites=new Tab("Favourites",favRoot);
+
+            tabMain.setClosable(false);
+            tabChart.setClosable(false);
+            tabFavourites.setClosable(false);
+
+            rootTabPane.getTabs().addAll(tabMain,tabChart,tabFavourites);
 
         } catch (IOException e) {
             e.printStackTrace();

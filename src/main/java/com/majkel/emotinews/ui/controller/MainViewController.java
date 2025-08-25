@@ -8,6 +8,7 @@ import com.majkel.emotinews.service.NewsPipeline;
 import javafx.animation.PauseTransition;
 import javafx.application.HostServices;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -73,10 +74,10 @@ public class MainViewController {
                    NewsWithEmotions selected=getItem();
                    if(selected!=null){
                        selected.getArticle().changeFavourite();
-                       setButtonIcon(selected.getArticle().isFavourite());
                        callbackFavNews.accept(new CallbackFav(selected, selected.getArticle().isFavourite()));
                    }
                 });
+
             }
 
             @Override
@@ -84,21 +85,22 @@ public class MainViewController {
                     super.updateItem(item, empty);
                     if(empty || item==null)
                     {
+                        favouriteButton.textProperty().unbind();
                         setText(null);
                         setGraphic(null);
                     }
                     else
                     {
-                        setButtonIcon(item.getArticle().isFavourite());
+                        favouriteButton.textProperty().unbind();
+                        favouriteButton.textProperty().bind(Bindings.when(item.getArticle().favouriteProperty())
+                                .then("★").otherwise("☆"));
+                        //setButtonIcon(item.getArticle().isFavourite());
                         titleLabel.setText(item.getArticle().getTitle());
                         setGraphic(content);
                         setOnMouseEntered(e->favouriteButton.setVisible(true));
                         setOnMouseExited(e->favouriteButton.setVisible(false));
                     }
 
-            }
-            private void setButtonIcon(boolean favourite){
-                    favouriteButton.setText(favourite? "★" : "☆");
             }
         });
 
