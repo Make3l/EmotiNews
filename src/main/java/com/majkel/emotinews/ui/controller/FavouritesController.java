@@ -1,16 +1,17 @@
 package com.majkel.emotinews.ui.controller;
 
+import com.majkel.emotinews.model.NewsArticle;
 import com.majkel.emotinews.model.NewsWithEmotions;
 import com.majkel.emotinews.storage.JSONStorage;
+import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,8 +23,24 @@ public class FavouritesController {
     private List<NewsWithEmotions>favAllList;
     private ObservableList<NewsWithEmotions>observableList;
 
+    private HostServices hostServices;
+
+    private NewsWithEmotions lastSelectedNews;
+
     @FXML
     private ListView<NewsWithEmotions> favList;
+
+    @FXML
+    private VBox detailedBox;
+
+    @FXML
+    private Label newsTitle;
+
+    @FXML
+    private Text newsDescription;
+
+    @FXML
+    private Hyperlink newsLink;
 
     @FXML
     public void initialize(){
@@ -47,6 +64,13 @@ public class FavouritesController {
                     {
                         removeFavourite(selected);
                         Platform.runLater(()->selected.getArticle().changeFavourite());
+                        if(selected.equals(lastSelectedNews)) {
+                            newsTitle.setText("");
+                            newsDescription.setText("");
+                            detailedBox.setManaged(false);
+                            detailedBox.setVisible(false);
+                            lastSelectedNews = null;
+                        }
                     }
 
                 });
@@ -64,9 +88,32 @@ public class FavouritesController {
                     setGraphic(hBox);
                     setOnMouseEntered(e->deleteFavButton.setVisible(true));
                     setOnMouseExited(e->deleteFavButton.setVisible(false));
-                    //setText(item.getArticle().getTitle());
                 }
             }
+
+        });
+
+        favList.setOnMouseClicked(e->{
+            NewsWithEmotions selected=favList.getSelectionModel().getSelectedItem();
+            favList.getSelectionModel().clearSelection();
+            if(selected!=null)
+            {
+                if(selected.equals(lastSelectedNews)){
+                    newsTitle.setText("");
+                    newsDescription.setText("");
+                    detailedBox.setManaged(false);
+                    detailedBox.setVisible(false);
+                    lastSelectedNews=null;
+                }else{
+                    newsTitle.setText(selected.getArticle().getTitle());
+                    newsDescription.setText(selected.getArticle().getDescription());
+                    newsLink.setOnAction(ns->{hostServices.showDocument(selected.getArticle().getUrl());});
+                    detailedBox.setManaged(true);
+                    detailedBox.setVisible(true);
+                    lastSelectedNews=selected;
+                }
+            }
+
         });
 
     }
@@ -99,6 +146,10 @@ public class FavouritesController {
     @FXML
     private void handleNeutral() {
         display(favAllList.stream().filter(e->e.getEmotion().equals("LABEL_1")).toList());
+    }
+
+    public void setHostServices(HostServices hostServices){
+        this.hostServices=hostServices;
     }
 
 

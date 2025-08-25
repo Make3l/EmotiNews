@@ -3,16 +3,27 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.majkel.emotinews.ui.controller.FavouritesController">
+<?import javafx.scene.text.Text?>
+<HBox xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.majkel.emotinews.ui.controller.FavouritesController"
+      alignment="TOP_LEFT" prefWidth="600" spacing="11">
+    <VBox alignment="CENTER" spacing="11" styleClass="left-panel" HBox.hgrow="ALWAYS">
 
-    <Label alignment="CENTER" text="Favourite news" />
-    <HBox alignment="CENTER" spacing="10">
-        <Button onAction="#handleAll"  text="All" />
-        <Button onAction="#handlePositive"  text="Positive" />
-        <Button onAction="#handleNegative"  text="Negative" />
-        <Button onAction="#handleNeutral" text="Neutral" />
-    </HBox>
+        <Label alignment="CENTER" text="Favourite news" />
+        <HBox alignment="CENTER" spacing="10">
+            <Button onAction="#handleAll"  text="All" />
+            <Button onAction="#handlePositive"  text="Positive" />
+            <Button onAction="#handleNegative"  text="Negative" />
+            <Button onAction="#handleNeutral" text="Neutral" />
+        </HBox>
 
-    <ListView fx:id="favList" prefWidth="400"  />
+        <ListView fx:id="favList" prefWidth="400"  />
 
-</VBox>
+    </VBox>
+
+    <VBox fx:id="detailedBox" managed="false" spacing="10" styleClass="details-box" visible="false">
+        <Label fx:id="newsTitle" maxWidth="-Infinity" styleClass="news-title" wrapText="true" />
+        <Text fx:id="newsDescription" wrappingWidth="330" styleClass="news-description" />
+        <Hyperlink fx:id="newsLink" styleClass="news-link" text="Click to read more" />
+    </VBox>
+</HBox>

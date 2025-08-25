@@ -109,12 +109,12 @@ public class MainViewController {
             listViewObj.getSelectionModel().clearSelection();
             if(selected!=null)
             {
-                if(selected== lastSelectedNews){
+                if(selected.equals(lastSelectedNews)){
                     title.setText("");
                     description.setText("");
                     detailedBox.setVisible(false);
                     detailedBox.setManaged(false);
-                    lastSelectedNews =null;
+                    lastSelectedNews = null;
                 }
                 else{
                     detailedBox.setVisible(true);

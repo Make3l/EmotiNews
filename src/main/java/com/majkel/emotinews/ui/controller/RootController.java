@@ -20,8 +20,12 @@ public class RootController {
 
 
     public void setHostServices(HostServices hostServices){
-        if(mainViewController!=null && hostServices!=null )
+        if(mainViewController!=null && favouritesController!=null && hostServices!=null )
+        {
             mainViewController.setHostServices(hostServices);
+            favouritesController.setHostServices(hostServices);
+        }
+
     }
 
     @FXML
