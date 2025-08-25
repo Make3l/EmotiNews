@@ -1,0 +1,81 @@
+/* style.css */
+.left-panel {
+    -fx-padding: 12;
+    -fx-background-color: #fafafa;
+}
+
+.filter-box {
+    -fx-spacing: 8;
+}
+
+.filter-button {
+    -fx-background-color: #f2f2f2;
+    -fx-text-fill: #333;
+    -fx-font-weight: 500;
+    -fx-background-radius: 6;
+    -fx-padding: 6 12;
+}
+
+.article-list {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+}
+
+.details-box {
+    -fx-padding: 14;
+    -fx-spacing: 10;
+    -fx-background-color: #fdfdfd;
+    -fx-border-color: #e5e5e5;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-pref-width: 380;
+}
+
+.news-description {
+    -fx-font-size: 14px;
+    -fx-text-fill: #444;
+    -fx-padding: 6 8 8 8;
+    -fx-line-spacing: 3px;
+}
+
+.news-title {
+    -fx-font-size: 20px;
+    -fx-text-fill: #222;
+    -fx-font-weight: 600;
+}
+
+.news-link {
+    -fx-text-fill: #2563eb;
+    -fx-underline: true;
+}
+
+.list-cell:hover {
+    -fx-background-color: #f3f4f6;
+}
+
+.article-list .news-title {
+    -fx-font-weight: 500;
+    -fx-text-fill: #1f2937;
+    -fx-font-size: 14px;
+    -fx-padding: 0 0 0 6;
+}
+
+.article-list .fav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill:#f59e0b;
+    -fx-font-size: 16px;
+    -fx-cursor: hand;
+}
+
+.news-item {
+    -fx-spacing: 2;
+    -fx-alignment: center-left;
+    -fx-padding: 2 2;
+}
+
+.article-list .fav-button:hover {
+    -fx-text-fill: #fbbf24;
+}

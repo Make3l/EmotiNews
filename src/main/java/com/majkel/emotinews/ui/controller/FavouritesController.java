@@ -57,7 +57,12 @@ public class FavouritesController {
             private Label newsTitle=new Label();
             private HBox hBox=new HBox(deleteFavButton,newsTitle);
             {
+                newsTitle.getStyleClass().add("news-title");
+                deleteFavButton.getStyleClass().add("fav-button");
                 deleteFavButton.setVisible(false);
+                hBox.getStyleClass().add("news-item");
+                deleteFavButton.setOnMouseEntered(e->{deleteFavButton.setText("☆");});
+                deleteFavButton.setOnMouseExited(e->{deleteFavButton.setText("★");});
                 deleteFavButton.setOnMouseClicked(e->{
                     NewsWithEmotions selected=getItem();
                     if(selected!=null)
@@ -72,7 +77,6 @@ public class FavouritesController {
                             lastSelectedNews = null;
                         }
                     }
-
                 });
             }
 
