@@ -1,11 +1,14 @@
 package com.majkel.emotinews.service;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.majkel.emotinews.adapter.BooleanPropertyAdapter;
 import com.majkel.emotinews.model.NewsHolder;
 import com.majkel.emotinews.config.ConfigLoader;
 import com.majkel.emotinews.exception.NewsApiException;
 import com.majkel.emotinews.model.NewsArticle;
 import com.majkel.emotinews.utils.CollectionUtils;
+import javafx.beans.property.BooleanProperty;
 
 import java.io.IOException;
 import java.net.URI;
@@ -19,7 +22,7 @@ public class NewsFetcher {
     private static final HttpClient httpClient=HttpClient.newHttpClient();
 
     public List<NewsArticle> getNewsList(String query){
-        Gson gson=new Gson();
+        Gson gson= new GsonBuilder().registerTypeAdapter(BooleanProperty.class,new  BooleanPropertyAdapter()).create();
         List<NewsArticle> articles = null;
         try {
             HttpRequest getRequest = HttpRequest.newBuilder()

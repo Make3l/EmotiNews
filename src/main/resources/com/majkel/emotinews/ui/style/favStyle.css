@@ -79,3 +79,10 @@
 .article-list .fav-button:hover {
     -fx-text-fill: #fbbf24;
 }
+
+.main-label{
+    -fx-font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1f2937;
+}

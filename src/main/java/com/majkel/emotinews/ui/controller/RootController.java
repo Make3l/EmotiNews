@@ -1,5 +1,6 @@
 package com.majkel.emotinews.ui.controller;
 
+import com.majkel.emotinews.model.NewsWithEmotions;
 import javafx.application.HostServices;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,6 +9,8 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RootController {
 
@@ -25,12 +28,29 @@ public class RootController {
             mainViewController.setHostServices(hostServices);
             favouritesController.setHostServices(hostServices);
         }
-
     }
+
+    public List<NewsWithEmotions> getFavouritesList(){
+        if(favouritesController!=null)
+            return favouritesController.getFavouritesList();
+        return new ArrayList<>();
+    }
+
+    public String getStorageFilePath(){
+        if(favouritesController!=null)
+            return favouritesController.getStorageFilePath();
+        return "";
+    }
+
 
     @FXML
     public void initialize() {
         try {
+
+            // Loading FavouritesView
+            FXMLLoader favLoader=new FXMLLoader(getClass().getResource("/com/majkel/emotinews/ui/view/FavouritesView.fxml"));
+            Parent favRoot=favLoader.load();
+            favouritesController=favLoader.getController();
 
             // Loading MainView
             FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/com/majkel/emotinews/ui/view/MainView.fxml"));
@@ -43,12 +63,6 @@ public class RootController {
             chartViewController = chartLoader.getController();
 
 
-            // Loading FavouritesView
-            FXMLLoader favLoader=new FXMLLoader(getClass().getResource("/com/majkel/emotinews/ui/view/FavouritesView.fxml"));
-            Parent favRoot=favLoader.load();
-            favouritesController=favLoader.getController();
-
-
 
             // Callback loading
             mainViewController.setCallbackConsumer(chartViewController::updateChart);
@@ -59,6 +73,8 @@ public class RootController {
                 else
                     favouritesController.removeFavourite(e.getNews());
             });
+
+            favouritesController.setCallbackFavList(mainViewController::setFavourites);
 
 
 

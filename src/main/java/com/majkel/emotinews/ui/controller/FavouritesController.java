@@ -15,7 +15,9 @@ import javafx.scene.text.Text;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class FavouritesController {
 
@@ -26,6 +28,8 @@ public class FavouritesController {
     private HostServices hostServices;
 
     private NewsWithEmotions lastSelectedNews;
+
+    private Consumer<List<NewsWithEmotions>> callbackFavList;
 
     @FXML
     private ListView<NewsWithEmotions> favList;
@@ -49,6 +53,9 @@ public class FavouritesController {
         } catch (IOException e) {
             System.out.println("ERROR: IOEXCEPTION in file (file path): "+storageFilePath);
         }
+
+        Platform.runLater(()->{callbackFavList.accept(favAllList);});
+
         observableList=FXCollections.observableArrayList(favAllList);
         favList.setItems(observableList);
 
@@ -156,5 +163,17 @@ public class FavouritesController {
         this.hostServices=hostServices;
     }
 
+    public List<NewsWithEmotions> getFavouritesList(){
+        if(favAllList!=null)
+            return favAllList;
+        return new ArrayList<>();
+    }
 
+    public String getStorageFilePath() {
+        return storageFilePath;
+    }
+
+    public void setCallbackFavList(Consumer<List<NewsWithEmotions>>callbackFavList){
+        this.callbackFavList=callbackFavList;
+    }
 }

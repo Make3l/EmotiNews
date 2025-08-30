@@ -1,5 +1,6 @@
 package com.majkel.emotinews.model;
 
+import com.google.gson.annotations.Expose;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
@@ -13,7 +14,10 @@ public class NewsArticle{
     private String publishedAt;
     private String content;
 
-    private BooleanProperty favourite=new SimpleBooleanProperty(false);
+    private boolean fav=false;
+
+    private BooleanProperty favourite=new SimpleBooleanProperty(fav);
+
 
     public String getPublishedAt() {
         return publishedAt;
@@ -69,6 +73,7 @@ public class NewsArticle{
 
     public void changeFavourite(){
         favourite.setValue(!favourite.get());
+        fav=!fav;
     }
 
     public BooleanProperty favouriteProperty() {

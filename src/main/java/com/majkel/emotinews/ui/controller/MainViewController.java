@@ -2,7 +2,6 @@ package com.majkel.emotinews.ui.controller;
 
 import com.majkel.emotinews.model.Callback;
 import com.majkel.emotinews.model.CallbackFav;
-import com.majkel.emotinews.model.NewsArticle;
 import com.majkel.emotinews.model.NewsWithEmotions;
 import com.majkel.emotinews.service.NewsPipeline;
 import javafx.animation.PauseTransition;
@@ -18,7 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class MainViewController {
@@ -55,13 +54,19 @@ public class MainViewController {
 
     private Consumer<CallbackFav> callbackFavNews;
 
+    private List<NewsWithEmotions> favourites=null;
+
     @FXML
     private void initialize(){
         allNews = NewsPipeline.loadNews();
-        display(allNews);
+        Platform.runLater(()->{
+            syncFavouritesWithAllNews();
+            display(allNews);
+        });
+
 
         listViewObj.setCellFactory(param-> new ListCell<>(){
-            private final Button favouriteButton=new Button("☆");
+            private final Button favouriteButton=new Button();
             private final Label titleLabel=new Label();
             private final HBox content=new HBox(favouriteButton,titleLabel);
 
@@ -94,7 +99,6 @@ public class MainViewController {
                         favouriteButton.textProperty().unbind();
                         favouriteButton.textProperty().bind(Bindings.when(item.getArticle().favouriteProperty())
                                 .then("★").otherwise("☆"));
-                        //setButtonIcon(item.getArticle().isFavourite());
                         titleLabel.setText(item.getArticle().getTitle());
                         setGraphic(content);
                         setOnMouseEntered(e->favouriteButton.setVisible(true));
@@ -189,6 +193,24 @@ public class MainViewController {
 
     public void setHostServices(HostServices hostServices){
         this.hostServices=hostServices;
+    }
+
+    private void syncFavouritesWithAllNews(){//it swaps objects in order to connect swapped news with this in favourites
+        if(favourites==null)
+            return;
+        Map<NewsWithEmotions,Integer> map=new HashMap<>();
+        for(int i=0;i<allNews.size();i++)
+            map.put(allNews.get(i),i);
+
+        for(NewsWithEmotions news: favourites){
+            Integer index=map.get(news);
+            if(index!=null)
+                allNews.set(index,news);
+        }
+    }
+
+    public void setFavourites(List<NewsWithEmotions>favourites){
+        this.favourites=favourites;
     }
 
 }

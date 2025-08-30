@@ -1,10 +1,13 @@
 package com.majkel.emotinews.ui.fxapp;
 
+import com.majkel.emotinews.storage.JSONStorage;
 import com.majkel.emotinews.ui.controller.RootController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import java.io.File;
 import java.io.IOException;
 
 public class FXMainApp extends Application {
@@ -19,6 +22,13 @@ public class FXMainApp extends Application {
         primaryStage.setTitle("EmotiNews");
         primaryStage.setScene(scene);
         primaryStage.show();
+        primaryStage.setOnCloseRequest(e->{
+            try{
+                JSONStorage.save(new File(rootController.getStorageFilePath()),rootController.getFavouritesList());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
     }
 
     public static void main(String[] args) {
