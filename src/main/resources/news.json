@@ -1,0 +1,53 @@
+[
+  {
+    "emotion": "LABEL_0",
+    "article": {
+      "author": "Justine Calma",
+      "title": "Trump administration suspends FEMA employees who warned about disaster response",
+      "description": "FEMA has suspended at least 30 employees after they warned that spending limits, staffing cuts, and gaps in leadership hurt the agency’s ability to respond to disasters. The employees received emails notifying them that they’d been put on administrative leave…",
+      "url": "https://www.theverge.com/news/766890/trump-fema-employees-suspended-letter",
+      "publishedAt": "2025-08-27T18:37:15Z",
+      "content": "\u003cul\u003e\u003cli\u003e\u003c/li\u003e\u003cli\u003e\u003c/li\u003e\u003cli\u003e\u003c/li\u003e\u003c/ul\u003e\r\nThe letter urges Congress to take action to stop the Trump administration from dismantling FEMA and prevent another national catastrophe like Hurricane Katrina.\r… [+2686 chars]",
+      "fav": true,
+      "favourite": true
+    }
+  },
+  {
+    "emotion": "LABEL_0",
+    "article": {
+      "author": "Ben Collins",
+      "title": "Trump and the NFL - why it\u0027s complicated",
+      "description": "After a lawsuit and many failed team bids, Donald Trump looked to have ended his 40-year feud with the NFL - but is their relationship set for another twist?",
+      "url": "https://www.bbc.com/sport/american-football/articles/cp82l659dero",
+      "publishedAt": "2025-08-28T09:29:58Z",
+      "content": "Already a real-estate magnate by that point, Trump viewed owning an American football team as a means of building his brand. After attempting to acquire an NFL franchise, a 37-year-old Trump bought t… [+1733 chars]",
+      "fav": true,
+      "favourite": true
+    }
+  },
+  {
+    "emotion": "LABEL_1",
+    "article": {
+      "author": "Eric Berger, Ars Technica",
+      "title": "A Secretive US Space Plane Will Soon Test Quantum Navigation Technology",
+      "description": "The space plane’s test flight will advance development of a new navigation technology based on electromagnetic wave interference.",
+      "url": "https://www.wired.com/story/a-secretive-space-plane-is-set-to-launch-and-test-quantum-navigation-technology/",
+      "publishedAt": "2025-07-29T14:30:00Z",
+      "content": "The X-37B, the US Space Forces secretive space plane, will soon take flight again.\r\nOn Monday, the Space Force announced that it will fly the small, Space Shuttleshaped vehicle on the programs eighth… [+3255 chars]",
+      "fav": true,
+      "favourite": true
+    }
+  },
+  {
+    "emotion": "LABEL_1",
+    "article": {
+      "title": "No. 2 Swiatek struggles, but extends major streak",
+      "description": "Iga Swiatek, the No. 2 seed, eked past Suzan Lamens at the US Open to again reach the third round, which she has done at every Slam event since the start of 2020.",
+      "url": "https://www.espn.com/tennis/story/_/id/46097551/us-open-iga-swiatek-reaches-3rd-round-extend-major-streak",
+      "publishedAt": "2025-08-28T19:35:11Z",
+      "content": "Aug 28, 2025, 03:20 PM ET\r\nWhen it comes to Iga Swiatek reaching the third round of a major, you may as well put it in ink.\r\nSwiatek, the No. 2 seed from Poland, struggled Thursday but got past world… [+1985 chars]",
+      "fav": true,
+      "favourite": true
+    }
+  }
+]

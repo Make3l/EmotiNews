@@ -1,5 +1,4 @@
 /* style.css */
-
 .left-panel {
     -fx-padding: 12;
     -fx-background-color: #fafafa;
@@ -15,31 +14,6 @@
     -fx-font-weight: 500;
     -fx-background-radius: 6;
     -fx-padding: 6 12;
-}
-
-.search-button {
-    -fx-background-color: #3b82f6;
-    -fx-text-fill: white;
-    -fx-font-weight: 500;
-    -fx-background-radius: 6;
-    -fx-padding: 6 14;
-}
-
-.cooldown-button {
-    -fx-background-color: #555;
-    -fx-text-fill: white;
-    -fx-font-weight: 500;
-    -fx-background-radius: 6;
-    -fx-padding: 6 14;
-}
-
-.topic-field {
-    -fx-font-size: 14px;
-    -fx-background-color: #fff;
-    -fx-border-color: #ddd;
-    -fx-border-radius: 5;
-    -fx-background-radius: 5;
-    -fx-padding: 5 8;
 }
 
 .article-list {
@@ -91,7 +65,7 @@
 
 .article-list .fav-button {
     -fx-background-color: transparent;
-    -fx-text-fill: #f59e0b;
+    -fx-text-fill:#f59e0b;
     -fx-font-size: 16px;
     -fx-cursor: hand;
 }
@@ -104,4 +78,11 @@
 
 .article-list .fav-button:hover {
     -fx-text-fill: #fbbf24;
+}
+
+.main-label{
+    -fx-font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1f2937;
 }

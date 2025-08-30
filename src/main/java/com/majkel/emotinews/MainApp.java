@@ -11,6 +11,7 @@ import java.util.List;
 public class MainApp {
     public static void main(String []args){
 
+        /*
         List<NewsWithEmotions>newsWithEmotions=NewsPipeline.loadNews();
 
         for(NewsWithEmotions e: newsWithEmotions){
@@ -33,5 +34,19 @@ public class MainApp {
 
         if(newsWithEmotions.equals(loadedList))
             System.out.println("Git jest!!!");
+
+         */
+        File file=new File("src/main/resources/news.json");
+        List<NewsWithEmotions>loadedList=List.of();
+        try{
+            loadedList=JSONStorage.load(file);
+        }catch(IOException e){
+            System.out.println("Json storage load: IOEXCEPTION");
+        }
+
+        for(NewsWithEmotions news: loadedList){
+            System.out.println(news.getArticle());
+            System.out.println(news.getArticle().isFavourite()?"Fav":"NIE FAV");
+        }
     }
 }
