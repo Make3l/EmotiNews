@@ -187,6 +187,7 @@ public class MainViewController {
         allNews=NewsPipeline.loadNews(topicField.getText());
         currentTopic=topicField.getText();
         callbackConsumer.accept(new Callback(currentTopic,allNews));
+        syncFavouritesWithAllNews();
         display(allNews);
         topicField.clear();
     }
