@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox stylesheets="@../style/chartStyle.css"
+      xmlns="http://javafx.com/javafx/17.0.12"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.majkel.emotinews.ui.controller.ChartController"
+      spacing="10" fillWidth="true">
+
+    <Label fx:id="chartLabel"
+           text="Topic"
+           styleClass="chart-topic-label"
+           VBox.vgrow="NEVER"
+           alignment="CENTER" />
+
+    <PieChart fx:id="emotionChart"
+              VBox.vgrow="ALWAYS"
+              maxWidth="Infinity"
+              maxHeight="Infinity" />
+
+</VBox>

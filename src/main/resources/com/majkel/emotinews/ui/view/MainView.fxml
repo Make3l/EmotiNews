@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<HBox alignment="TOP_LEFT" prefWidth="600" spacing="11" stylesheets="@../style/style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.majkel.emotinews.ui.controller.MainViewController">
+
+    <VBox alignment="CENTER" spacing="11" styleClass="left-panel" HBox.hgrow="ALWAYS">
+        <HBox alignment="CENTER" spacing="10" styleClass="filter-box">
+            <Button onAction="#handleAll" styleClass="filter-button" text="All" />
+            <Button onAction="#handlePositive" styleClass="filter-button" text="Positive" />
+            <Button onAction="#handleNegative" styleClass="filter-button" text="Negative" />
+            <Button onAction="#handleNeutral" styleClass="filter-button" text="Neutral" />
+        </HBox>
+
+        <HBox alignment="CENTER" spacing="10">
+            <TextField fx:id="topicField" prefWidth="300" promptText="Enter topic..." styleClass="topic-field" />
+            <Button fx:id="searchButton" onAction="#searchTopic" styleClass="search-button" text="Search" />
+        </HBox>
+        <ListView fx:id="listViewObj" prefWidth="400" styleClass="article-list" />
+    </VBox>
+
+    <VBox fx:id="detailedBox" managed="false" spacing="10" styleClass="details-box" visible="false">
+        <Label fx:id="title" maxWidth="-Infinity" styleClass="news-title" wrapText="true" />
+        <Text fx:id="description" wrappingWidth="330" styleClass="news-description" />
+        <Hyperlink fx:id="link" styleClass="news-link" text="Click to read more" />
+    </VBox>
+</HBox>

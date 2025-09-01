@@ -1,11 +1,23 @@
 package com.majkel.emotinews.model;
 
+import com.google.gson.annotations.Expose;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+
+import java.util.Objects;
+
 public class NewsArticle{
     private String author;
     private String title;
     private String description;
     private String url;
     private String publishedAt;
+    private String content;
+
+    private boolean fav=false;
+
+    private BooleanProperty favourite=new SimpleBooleanProperty(fav);
+
 
     public String getPublishedAt() {
         return publishedAt;
@@ -43,13 +55,50 @@ public class NewsArticle{
         return author;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     public void setAuthor(String author) {
         this.author = author;
     }
+
+    public boolean isFavourite(){
+        return favourite.get();
+    }
+
+    public void changeFavourite(){
+        favourite.setValue(!favourite.get());
+        fav=!fav;
+    }
+
+    public BooleanProperty favouriteProperty() {
+        return favourite;
+    }
+
     @Override
     public String toString(){
         StringBuilder str=new StringBuilder();
         str.append(author).append(" ").append(title).append(" ").append(description);
         return str.toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof NewsArticle that)) return false;
+        return title.equals(that.getTitle()) && description.equals(that.getDescription()) && url.equals(that.url);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, description, url);
+    }
+
+
+
 }

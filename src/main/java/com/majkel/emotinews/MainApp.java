@@ -1,36 +1,52 @@
 package com.majkel.emotinews;
 
-import com.majkel.emotinews.model.NewsArticle;
 import com.majkel.emotinews.model.NewsWithEmotions;
-import com.majkel.emotinews.model.TextEmotion;
-import com.majkel.emotinews.service.EmotionsAnalyzer;
-import com.majkel.emotinews.service.NewsFetcher;
-import com.majkel.emotinews.utils.CollectionUtils;
+import com.majkel.emotinews.service.NewsPipeline;
+import com.majkel.emotinews.storage.JSONStorage;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class MainApp {
     public static void main(String []args){
 
-        NewsFetcher newsFetcher=new NewsFetcher();
-        List<NewsArticle>articles = newsFetcher.getNewsList("top-headlines?q=War");
         /*
-        for(NewsArticle article: articles){
-            System.out.println(article+" ");
-        }
-         */
-        List<String>lSting= CollectionUtils.toStringList(articles);
-        System.out.println(lSting);
-
-        EmotionsAnalyzer emotionsAnalyzer=new EmotionsAnalyzer();
-        List<TextEmotion>emotions=emotionsAnalyzer.parseArticles(lSting);
-        List<NewsWithEmotions>newsWithEmotions=CollectionUtils.toNewsWithEmotionsList(articles,emotions);
+        List<NewsWithEmotions>newsWithEmotions=NewsPipeline.loadNews();
 
         for(NewsWithEmotions e: newsWithEmotions){
             System.out.println(e.getEmotion()+" "+e.getArticle());
         }
 
+        File file=new File("src/main/resources/news.json");
+        try{
+            JSONStorage.save(file,newsWithEmotions);
+        }catch(IOException e){
+            System.out.println("Json storage save: IOEXCEPTION");
+        }
 
+        List<NewsWithEmotions>loadedList=List.of();
+        try{
+           loadedList=JSONStorage.load(file);
+        }catch(IOException e){
+            System.out.println("Json storage load: IOEXCEPTION");
+        }
 
+        if(newsWithEmotions.equals(loadedList))
+            System.out.println("Git jest!!!");
+
+         */
+        File file=new File("src/main/resources/news.json");
+        List<NewsWithEmotions>loadedList=List.of();
+        try{
+            loadedList=JSONStorage.load(file);
+        }catch(IOException e){
+            System.out.println("Json storage load: IOEXCEPTION");
+        }
+
+        for(NewsWithEmotions news: loadedList){
+            System.out.println(news.getArticle());
+            System.out.println(news.getArticle().isFavourite()?"Fav":"NIE FAV");
+        }
     }
 }

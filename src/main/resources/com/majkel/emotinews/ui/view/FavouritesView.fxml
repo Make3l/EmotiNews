@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<HBox xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.majkel.emotinews.ui.controller.FavouritesController"
+      alignment="TOP_LEFT" prefWidth="600" spacing="11" stylesheets="@../style/favStyle.css">
+    <VBox alignment="CENTER" spacing="11" styleClass="left-panel" HBox.hgrow="ALWAYS">
+
+        <Label alignment="CENTER" text="Favourite news" styleClass="main-label"/>
+        <HBox alignment="CENTER" spacing="10">
+            <Button onAction="#handleAll" text="All" styleClass="filter-button"/>
+            <Button onAction="#handlePositive"  text="Positive" styleClass="filter-button"/>
+            <Button onAction="#handleNegative"  text="Negative" styleClass="filter-button"/>
+            <Button onAction="#handleNeutral" text="Neutral" styleClass="filter-button"/>
+        </HBox>
+
+        <ListView fx:id="favList" prefWidth="400" styleClass="article-list"/>
+
+    </VBox>
+
+    <VBox fx:id="detailedBox" managed="false" spacing="10" styleClass="details-box" visible="false">
+        <Label fx:id="newsTitle" maxWidth="-Infinity" styleClass="news-title" wrapText="true" />
+        <Text fx:id="newsDescription" wrappingWidth="330" styleClass="news-description" />
+        <Hyperlink fx:id="newsLink" styleClass="news-link" text="Click to read more" />
+    </VBox>
+</HBox>
