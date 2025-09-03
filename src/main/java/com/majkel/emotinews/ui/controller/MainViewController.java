@@ -56,6 +56,8 @@ public class MainViewController {
 
     private List<NewsWithEmotions> favourites=null;
 
+    //TODO url button anty null protection
+
     @FXML
     private void initialize(){
         allNews = NewsPipeline.loadNews();
@@ -125,7 +127,12 @@ public class MainViewController {
                     detailedBox.setManaged(true);
                     title.setText(selected.getArticle().getTitle());
                     description.setText(selected.getArticle().getDescription());
-                    link.setOnAction(event->hostServices.showDocument(selected.getArticle().getUrl()));
+                    String currentURL=selected.getArticle().getUrl();
+                    if(currentURL!=null && !currentURL.isEmpty())
+                        link.setOnAction(event->hostServices.showDocument(currentURL));
+                    else
+                        link.setVisible(false);
+
                     lastSelectedNews =selected;
                 }
             }

@@ -18,6 +18,20 @@ public class NewsArticle{
 
     private BooleanProperty favourite=new SimpleBooleanProperty(fav);
 
+    public NewsArticle(){}
+
+    public NewsArticle(String title, String description){
+        this.title=title;
+        this.description=description;
+    }
+
+    public static NewsArticle createFallBackNews(){
+        return new NewsArticle(
+                "Error: No Internet Connection",
+                "You are seeing this message because the app could not connect to the News API. Please check your internet connection and try again."
+        );
+    }
+
 
     public String getPublishedAt() {
         return publishedAt;
