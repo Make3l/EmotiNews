@@ -27,8 +27,15 @@ public class NewsArticle{
 
     public static NewsArticle createFallBackNews(){
         return new NewsArticle(
-                "Error: No Internet Connection",
+                "Error: Sentiment Analysis Unavailable",
                 "You are seeing this message because the app could not connect to the News API. Please check your internet connection and try again."
+        );
+    }
+
+    public static NewsArticle createAnalyzingNewsFallBackNews(){
+        return new NewsArticle(
+                "Error: Couldn't connect to",
+                "The app could not process the news sentiment using the HuggingFace model. Sometimes it could be overloaded, don't worry and please try again later."
         );
     }
 

@@ -56,7 +56,6 @@ public class MainViewController {
 
     private List<NewsWithEmotions> favourites=null;
 
-    //TODO url button anty null protection
 
     @FXML
     private void initialize(){

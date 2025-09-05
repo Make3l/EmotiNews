@@ -6,6 +6,7 @@ import com.majkel.emotinews.model.NewsWithEmotions;
 import com.majkel.emotinews.model.TextEmotion;
 import com.majkel.emotinews.utils.CollectionUtils;
 
+import java.net.http.HttpTimeoutException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +32,16 @@ public class NewsPipeline {
 
         List<String>lSting= CollectionUtils.toStringList(articles);
 
+        List<NewsWithEmotions>newsWithEmotions=null;
+
         EmotionsAnalyzer emotionsAnalyzer=new EmotionsAnalyzer();
-        List<TextEmotion>emotions=emotionsAnalyzer.parseArticles(lSting);
-        List<NewsWithEmotions>newsWithEmotions=CollectionUtils.toNewsWithEmotionsList(articles,emotions);
+        try {
+            List<TextEmotion> emotions = emotionsAnalyzer.parseArticles(lSting);
+            newsWithEmotions=CollectionUtils.toNewsWithEmotionsList(articles,emotions);
+        } catch (HttpTimeoutException e) {
+            newsWithEmotions=new ArrayList<>();
+            newsWithEmotions.add(new NewsWithEmotions("LABEL_0",NewsArticle.createAnalyzingNewsFallBackNews()));
+        }
 
         return newsWithEmotions;
     }
@@ -58,9 +66,16 @@ public class NewsPipeline {
 
         List<String>lSting= CollectionUtils.toStringList(articles);
 
+        List<NewsWithEmotions>newsWithEmotions=null;
+
         EmotionsAnalyzer emotionsAnalyzer=new EmotionsAnalyzer();
-        List<TextEmotion>emotions=emotionsAnalyzer.parseArticles(lSting);
-        List<NewsWithEmotions>newsWithEmotions=CollectionUtils.toNewsWithEmotionsList(articles,emotions);
+        try {
+            List<TextEmotion> emotions = emotionsAnalyzer.parseArticles(lSting);
+            newsWithEmotions=CollectionUtils.toNewsWithEmotionsList(articles,emotions);
+        } catch (HttpTimeoutException e) {
+            newsWithEmotions=new ArrayList<>();
+            newsWithEmotions.add(new NewsWithEmotions("LABEL_0",NewsArticle.createAnalyzingNewsFallBackNews()));
+        }
 
         return newsWithEmotions;
     }

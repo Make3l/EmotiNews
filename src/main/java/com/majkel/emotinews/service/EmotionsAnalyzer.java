@@ -14,6 +14,7 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.net.http.HttpTimeoutException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +23,7 @@ public class EmotionsAnalyzer {
 
     private final static HttpClient httpClient=HttpClient.newHttpClient();
 
-    public List<TextEmotion> parseArticles(List<String> news){
-        System.out.println(news);
-        System.out.println("\n");
-        System.out.println(news.size());
+    public List<TextEmotion> parseArticles(List<String> news) throws HttpTimeoutException{
         try {
             Thread.currentThread().sleep(10000);
         } catch (InterruptedException e) {
@@ -35,27 +33,27 @@ public class EmotionsAnalyzer {
             return new ArrayList<>();
         List<TextEmotion> emotionsList=null;
         Gson gson=new Gson();
-        try{
-            HttpRequest httpPost=HttpRequest.newBuilder()
+        try {
+            HttpRequest httpPost = HttpRequest.newBuilder()
                     .uri(new URI("https://api-inference.huggingface.co/models/cardiffnlp/twitter-roberta-base-sentiment"))
-                    .POST(HttpRequest.BodyPublishers.ofString("{\n"+"\"inputs\": "+gson.toJson(news)+"\n}"))
+                    .POST(HttpRequest.BodyPublishers.ofString("{\n" + "\"inputs\": " + gson.toJson(news) + "\n}"))
                     .header("Authorization", ConfigLoader.getValue("api.huggingface.emotions.analizer"))
                     .header("Content-Type", "application/json")
-                    //.timeout(Duration.ofSeconds(45))
+                    .timeout(Duration.ofSeconds(35))
                     .build();
-            HttpResponse<String> stringHttpResponse=httpClient.send(httpPost, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> stringHttpResponse = httpClient.send(httpPost, HttpResponse.BodyHandlers.ofString());
 
-            if(stringHttpResponse.statusCode()!=200)
-                throw new ParsingNewsApiException("Received status code "+ stringHttpResponse.statusCode());
+            if (stringHttpResponse.statusCode() != 200)
+                throw new ParsingNewsApiException("Received status code " + stringHttpResponse.statusCode());
 
             if (stringHttpResponse.statusCode() == 429) {
                 throw new ParsingNewsApiException("Rate limit exceeded when calling HuggingFace API");
             }
 
-            Type type = new TypeToken<List<List<TextEmotion>>>(){}.getType();
+            Type type = new TypeToken<List<List<TextEmotion>>>() {
+            }.getType();
             List<List<TextEmotion>> parsed = gson.fromJson(stringHttpResponse.body(), type);
             emotionsList = parsed.get(0);
-
         }catch(URISyntaxException e){
             throw new RuntimeException("URISyntaxException ",e);
         } catch (InterruptedException e) {

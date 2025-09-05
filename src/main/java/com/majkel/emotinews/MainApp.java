@@ -1,5 +1,6 @@
 package com.majkel.emotinews;
 
+import com.majkel.emotinews.config.ConfigLoader;
 import com.majkel.emotinews.model.NewsWithEmotions;
 import com.majkel.emotinews.service.NewsPipeline;
 import com.majkel.emotinews.storage.JSONStorage;
@@ -36,7 +37,7 @@ public class MainApp {
             System.out.println("Git jest!!!");
 
          */
-        File file=new File("src/main/resources/news.json");
+        File file=new File(ConfigLoader.getValue("news.storage.path"));
         List<NewsWithEmotions>loadedList=List.of();
         try{
             loadedList=JSONStorage.load(file);
