@@ -49,5 +49,18 @@
       "fav": true,
       "favourite": true
     }
+  },
+  {
+    "emotion": "LABEL_1",
+    "article": {
+      "author": "Riley Gutiérrez McDermid",
+      "title": "Musk Stakes Tesla Future on One Major Gamble",
+      "description": "Will it become the next commonly adopted technology after EVs and smartphones?",
+      "url": "https://gizmodo.com/musk-optimus-robots-2000653481",
+      "publishedAt": "2025-09-04T14:40:08Z",
+      "content": "In a striking shift of narrative, Elon Musk has declared that Teslas future valuation will derive 80% from its Optimus humanoid robots, not its electric vehicle business.\r\nThis declaration, made in t… [+4149 chars]",
+      "fav": true,
+      "favourite": true
+    }
   }
 ]

@@ -1,5 +1,6 @@
 package com.majkel.emotinews.ui.fxapp;
 
+import com.majkel.emotinews.config.ConfigLoader;
 import com.majkel.emotinews.storage.JSONStorage;
 import com.majkel.emotinews.ui.controller.RootController;
 import javafx.application.Application;
@@ -23,11 +24,7 @@ public class FXMainApp extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
         primaryStage.setOnCloseRequest(e->{
-            try{
-                JSONStorage.save(new File(rootController.getStorageFilePath()),rootController.getFavouritesList());
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
+            JSONStorage.safeSave(new File(ConfigLoader.getValue("news.storage.path")),rootController.getFavouritesList());
         });
     }
 

@@ -1,5 +1,6 @@
 package com.majkel.emotinews.ui.controller;
 
+import com.majkel.emotinews.config.ConfigLoader;
 import com.majkel.emotinews.model.NewsArticle;
 import com.majkel.emotinews.model.NewsWithEmotions;
 import com.majkel.emotinews.storage.JSONStorage;
@@ -15,13 +16,14 @@ import javafx.scene.text.Text;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputFilter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
 public class FavouritesController {
 
-    private final String storageFilePath="src/main/resources/news.json";
+    private final String storageFilePath= ConfigLoader.getValue("news.storage.path");
     private List<NewsWithEmotions>favAllList;
     private ObservableList<NewsWithEmotions>observableList;
 
@@ -48,11 +50,7 @@ public class FavouritesController {
 
     @FXML
     public void initialize(){
-        try{
-            favAllList= JSONStorage.load(new File(storageFilePath));
-        } catch (IOException e) {
-            System.out.println("ERROR: IOEXCEPTION in file (file path): "+storageFilePath);
-        }
+        favAllList=JSONStorage.safeLoad(new File(storageFilePath));
 
         Platform.runLater(()->{callbackFavList.accept(favAllList);});
 
@@ -167,10 +165,6 @@ public class FavouritesController {
         if(favAllList!=null)
             return favAllList;
         return new ArrayList<>();
-    }
-
-    public String getStorageFilePath() {
-        return storageFilePath;
     }
 
     public void setCallbackFavList(Consumer<List<NewsWithEmotions>>callbackFavList){

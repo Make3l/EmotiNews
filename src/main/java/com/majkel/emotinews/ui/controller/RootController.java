@@ -36,12 +36,6 @@ public class RootController {
         return new ArrayList<>();
     }
 
-    public String getStorageFilePath(){
-        if(favouritesController!=null)
-            return favouritesController.getStorageFilePath();
-        return "";
-    }
-
 
     @FXML
     public void initialize() {
