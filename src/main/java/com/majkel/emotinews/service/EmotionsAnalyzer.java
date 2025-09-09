@@ -3,6 +3,7 @@ package com.majkel.emotinews.service;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.majkel.emotinews.config.ConfigLoader;
+import com.majkel.emotinews.exception.NewsApiException;
 import com.majkel.emotinews.exception.ParsingNewsApiException;
 import com.majkel.emotinews.model.NewsWithEmotions;
 import com.majkel.emotinews.model.TextEmotion;
@@ -43,18 +44,20 @@ public class EmotionsAnalyzer {
                     .build();
             HttpResponse<String> stringHttpResponse = httpClient.send(httpPost, HttpResponse.BodyHandlers.ofString());
 
-            if (stringHttpResponse.statusCode() != 200)
-                throw new ParsingNewsApiException("Received status code " + stringHttpResponse.statusCode());
-
-            if (stringHttpResponse.statusCode() == 429) {
+            if (stringHttpResponse.statusCode() == 401 || stringHttpResponse.statusCode() == 403) {
+                throw new ParsingNewsApiException("Invalid or missing API key");
+            } else if (stringHttpResponse.statusCode() == 429) {
                 throw new ParsingNewsApiException("Rate limit exceeded when calling HuggingFace API");
-            }
+            } else if(stringHttpResponse.statusCode()!=200)
+                throw new ParsingNewsApiException("Received status code " + stringHttpResponse.statusCode());
 
             Type type = new TypeToken<List<List<TextEmotion>>>() {
             }.getType();
             List<List<TextEmotion>> parsed = gson.fromJson(stringHttpResponse.body(), type);
             emotionsList = parsed.get(0);
-        }catch(URISyntaxException e){
+        } catch (HttpTimeoutException e){
+            throw e;
+        } catch(URISyntaxException e){
             throw new RuntimeException("URISyntaxException ",e);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

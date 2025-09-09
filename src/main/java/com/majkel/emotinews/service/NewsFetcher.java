@@ -32,21 +32,24 @@ public class NewsFetcher {
                     .header("X-Api-Key", ConfigLoader.getValue("api.news.key"))
                     .build();
             HttpResponse<String> getResponse=httpClient.send(getRequest, HttpResponse.BodyHandlers.ofString());
-            if(getResponse.statusCode()!=200)
-                throw new NewsApiException("Received status code "+getResponse.statusCode());
+
+            if (getResponse.statusCode() == 401 || getResponse.statusCode() == 403) {
+                throw new NewsApiException("Invalid or missing API key");
+            } else if(getResponse.statusCode()!=200)
+                throw new NewsApiException("NewsAPI request failed with status code "+getResponse.statusCode());
 
             NewsHolder response=gson.fromJson(getResponse.body(),NewsHolder.class);
             articles=response.getArticles();
 
-        }catch(URISyntaxException e){
+        } catch(URISyntaxException e){
             throw new NewsApiException("Invalid API URL", e);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new NewsApiException("Thread was interrupted while calling NewsAPI", e);
+        } catch(JsonSyntaxException e){
+            throw new NewsApiException("Invalid JSON received from NewsApi",e);
         } catch (IOException e) {
             throw new NewsApiException("I/O error while calling NewsAPI", e);
-        }catch(JsonSyntaxException e){
-            throw new NewsApiException("Invalid JSON received from NewsApi",e);
         }
 
         if(articles!=null && !articles.isEmpty())

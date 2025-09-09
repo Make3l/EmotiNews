@@ -25,16 +25,16 @@ public class NewsArticle{
         this.description=description;
     }
 
-    public static NewsArticle createFallBackNews(){
+    public static NewsArticle createFallBackNews(String errorMsg){
         return new NewsArticle(
-                "Error: Sentiment Analysis Unavailable",
+                "Error: "+errorMsg,
                 "You are seeing this message because the app could not connect to the News API. Please check your internet connection and try again."
         );
     }
 
-    public static NewsArticle createAnalyzingNewsFallBackNews(){
+    public static NewsArticle createAnalyzingNewsFallBackNews(String errorMsg){
         return new NewsArticle(
-                "Error: Couldn't connect to",
+                "Error: "+errorMsg,
                 "The app could not process the news sentiment using the HuggingFace model. Sometimes it could be overloaded, don't worry and please try again later."
         );
     }
