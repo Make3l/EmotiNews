@@ -39,6 +39,14 @@ public class NewsArticle{
         );
     }
 
+    public static NewsArticle createDefaultNews(){
+        return new NewsArticle(
+                "Waiting for news to load :D",
+                "After news load this news will be replaced"
+        );
+    }
+
+
 
     public String getPublishedAt() {
         return publishedAt;
