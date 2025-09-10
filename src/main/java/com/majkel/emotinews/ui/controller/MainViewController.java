@@ -2,6 +2,7 @@ package com.majkel.emotinews.ui.controller;
 
 import com.majkel.emotinews.model.Callback;
 import com.majkel.emotinews.model.CallbackFav;
+import com.majkel.emotinews.model.NewsArticle;
 import com.majkel.emotinews.model.NewsWithEmotions;
 import com.majkel.emotinews.service.NewsPipeline;
 import javafx.animation.PauseTransition;
@@ -10,6 +11,7 @@ import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
@@ -56,14 +58,35 @@ public class MainViewController {
 
     private List<NewsWithEmotions> favourites=null;
 
+    private Task<List<NewsWithEmotions>> newsPipelineTask;
+
 
     @FXML
     private void initialize(){
-        allNews = NewsPipeline.loadNews();
-        Platform.runLater(()->{
+        allNews=new ArrayList<>();
+        allNews.add(new NewsWithEmotions("LABEL_1", NewsArticle.createDefaultNews()));
+        Platform.runLater(()->display(allNews));
+
+        Task<List<NewsWithEmotions>>task=new Task<>() {
+            @Override
+            protected List<NewsWithEmotions> call() throws Exception{
+                return NewsPipeline.loadNews();
+            }
+        };
+        task.setOnSucceeded(e->{
+            allNews=task.getValue();
+            Platform.runLater(()->callbackConsumer.accept(new Callback(currentTopic,allNews)));
             syncFavouritesWithAllNews();
             display(allNews);
         });
+        task.setOnFailed(e->{
+            Throwable ex = task.getException();
+            System.err.println("Failed at newsPipelineTask: " + ex.getMessage());
+            ex.printStackTrace();
+        });
+        new Thread(task).start();
+
+
 
 
         listViewObj.setCellFactory(param-> new ListCell<>(){
@@ -108,7 +131,6 @@ public class MainViewController {
 
             }
         });
-
         listViewObj.setOnMouseClicked(e->{
             NewsWithEmotions selected=listViewObj.getSelectionModel().getSelectedItem();
             listViewObj.getSelectionModel().clearSelection();
@@ -179,10 +201,15 @@ public class MainViewController {
         if(topicField.getText().isEmpty())
             return;
 
+        if(newsPipelineTask!=null && newsPipelineTask.isRunning()){
+            System.out.println("The search has already begun");
+            return;
+        }
+
         searchButton.setDisable(true);
         searchButton.getStyleClass().removeAll("search-button","cooldown-button");
         searchButton.getStyleClass().add("cooldown-button");
-        PauseTransition pauseTransition=new PauseTransition(Duration.seconds(4));
+        PauseTransition pauseTransition=new PauseTransition(Duration.seconds(15));
         pauseTransition.setOnFinished(e->{
             searchButton.setDisable(false);
             searchButton.getStyleClass().removeAll("search-button","cooldown-button");
@@ -190,12 +217,28 @@ public class MainViewController {
         });
         pauseTransition.play();
 
-        allNews=NewsPipeline.loadNews(topicField.getText());
-        currentTopic=topicField.getText();
-        callbackConsumer.accept(new Callback(currentTopic,allNews));
-        syncFavouritesWithAllNews();
-        display(allNews);
-        topicField.clear();
+        newsPipelineTask=new Task<>() {
+            @Override
+            protected List<NewsWithEmotions> call() throws Exception{
+                return NewsPipeline.loadNews(topicField.getText());
+            }
+        };
+        newsPipelineTask.setOnSucceeded(e->{
+            allNews=newsPipelineTask.getValue();
+            currentTopic=topicField.getText();
+            callbackConsumer.accept(new Callback(currentTopic,allNews));
+            syncFavouritesWithAllNews();
+            display(allNews);
+            topicField.clear();
+            newsPipelineTask=null;
+        });
+        newsPipelineTask.setOnFailed(e->{
+            Throwable ex = newsPipelineTask.getException();
+            System.err.println("Failed at newsPipelineTask: " + ex.getMessage());
+            ex.printStackTrace();
+            newsPipelineTask=null;
+        });
+        new Thread(newsPipelineTask).start();
     }
 
     public void setHostServices(HostServices hostServices){
