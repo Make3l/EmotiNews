@@ -2,6 +2,7 @@ package com.majkel.emotinews.ui.controller;
 
 import com.majkel.emotinews.model.Callback;
 import com.majkel.emotinews.model.CallbackFav;
+import com.majkel.emotinews.model.NewsArticle;
 import com.majkel.emotinews.model.NewsWithEmotions;
 import com.majkel.emotinews.service.NewsPipeline;
 import javafx.animation.PauseTransition;
@@ -10,6 +11,7 @@ import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
@@ -48,6 +50,12 @@ public class MainViewController {
     @FXML
     private Button searchButton;
 
+    @FXML
+    private ProgressIndicator loadingSpinner;
+
+    @FXML
+    private Label loadingLabel;
+
     private String currentTopic="technology";//current topic, default=technology
 
     private Consumer<Callback> callbackConsumer;
@@ -56,13 +64,47 @@ public class MainViewController {
 
     private List<NewsWithEmotions> favourites=null;
 
+    private Task<List<NewsWithEmotions>> newsPipelineTask;
+
+
     @FXML
     private void initialize(){
-        allNews = NewsPipeline.loadNews();
-        Platform.runLater(()->{
+        allNews=new ArrayList<>();
+        allNews.add(new NewsWithEmotions("LABEL_1", NewsArticle.createDefaultNews()));
+        Platform.runLater(()->display(allNews));
+
+        Task<List<NewsWithEmotions>>task=new Task<>() {
+            @Override
+            protected List<NewsWithEmotions> call() throws Exception{
+                return NewsPipeline.loadNews();
+            }
+        };
+        loadingSpinner.visibleProperty().bind(task.runningProperty());
+        loadingSpinner.managedProperty().bind(task.runningProperty());
+        loadingLabel.visibleProperty().bind(task.runningProperty());
+        loadingLabel.managedProperty().bind(task.runningProperty());
+        task.setOnSucceeded(e->{
+            allNews=task.getValue();
+            Platform.runLater(()->callbackConsumer.accept(new Callback(currentTopic,allNews)));
             syncFavouritesWithAllNews();
             display(allNews);
+            loadingSpinner.visibleProperty().unbind();
+            loadingSpinner.managedProperty().unbind();
+            loadingLabel.visibleProperty().unbind();
+            loadingLabel.managedProperty().unbind();
         });
+        task.setOnFailed(e->{
+            Throwable ex = task.getException();
+            System.err.println("Failed at newsPipelineTask: " + ex.getMessage());
+            ex.printStackTrace();
+            loadingSpinner.visibleProperty().unbind();
+            loadingSpinner.managedProperty().unbind();
+            loadingLabel.visibleProperty().unbind();
+            loadingLabel.managedProperty().unbind();
+        });
+        new Thread(task).start();
+
+
 
 
         listViewObj.setCellFactory(param-> new ListCell<>(){
@@ -107,7 +149,6 @@ public class MainViewController {
 
             }
         });
-
         listViewObj.setOnMouseClicked(e->{
             NewsWithEmotions selected=listViewObj.getSelectionModel().getSelectedItem();
             listViewObj.getSelectionModel().clearSelection();
@@ -125,7 +166,12 @@ public class MainViewController {
                     detailedBox.setManaged(true);
                     title.setText(selected.getArticle().getTitle());
                     description.setText(selected.getArticle().getDescription());
-                    link.setOnAction(event->hostServices.showDocument(selected.getArticle().getUrl()));
+                    String currentURL=selected.getArticle().getUrl();
+                    if(currentURL!=null && !currentURL.isEmpty())
+                        link.setOnAction(event->hostServices.showDocument(currentURL));
+                    else
+                        link.setVisible(false);
+
                     lastSelectedNews =selected;
                 }
             }
@@ -173,10 +219,15 @@ public class MainViewController {
         if(topicField.getText().isEmpty())
             return;
 
+        if(newsPipelineTask!=null && newsPipelineTask.isRunning()){
+            System.out.println("The search has already begun");
+            return;
+        }
+
         searchButton.setDisable(true);
         searchButton.getStyleClass().removeAll("search-button","cooldown-button");
         searchButton.getStyleClass().add("cooldown-button");
-        PauseTransition pauseTransition=new PauseTransition(Duration.seconds(4));
+        PauseTransition pauseTransition=new PauseTransition(Duration.seconds(15));
         pauseTransition.setOnFinished(e->{
             searchButton.setDisable(false);
             searchButton.getStyleClass().removeAll("search-button","cooldown-button");
@@ -184,12 +235,45 @@ public class MainViewController {
         });
         pauseTransition.play();
 
-        allNews=NewsPipeline.loadNews(topicField.getText());
-        currentTopic=topicField.getText();
-        callbackConsumer.accept(new Callback(currentTopic,allNews));
-        syncFavouritesWithAllNews();
-        display(allNews);
-        topicField.clear();
+        newsPipelineTask=new Task<>() {
+            @Override
+            protected List<NewsWithEmotions> call() throws Exception{
+                return NewsPipeline.loadNews(topicField.getText());
+            }
+        };
+
+        loadingSpinner.visibleProperty().bind(newsPipelineTask.runningProperty());
+        loadingSpinner.managedProperty().bind(newsPipelineTask.runningProperty());
+        searchButton.disableProperty().bind(newsPipelineTask.runningProperty());
+        loadingLabel.visibleProperty().bind(newsPipelineTask.runningProperty());
+        loadingLabel.managedProperty().bind(newsPipelineTask.runningProperty());
+
+        newsPipelineTask.setOnSucceeded(e->{
+            allNews=newsPipelineTask.getValue();
+            currentTopic=topicField.getText();
+            callbackConsumer.accept(new Callback(currentTopic,allNews));
+            syncFavouritesWithAllNews();
+            display(allNews);
+            topicField.clear();
+            newsPipelineTask=null;
+            loadingSpinner.visibleProperty().unbind();
+            loadingSpinner.managedProperty().unbind();
+            searchButton.disableProperty().unbind();
+            loadingLabel.visibleProperty().unbind();
+            loadingLabel.managedProperty().unbind();
+        });
+        newsPipelineTask.setOnFailed(e->{
+            Throwable ex = newsPipelineTask.getException();
+            System.err.println("Failed at newsPipelineTask: " + ex.getMessage());
+            ex.printStackTrace();
+            newsPipelineTask=null;
+            loadingSpinner.visibleProperty().unbind();
+            loadingSpinner.managedProperty().unbind();
+            searchButton.disableProperty().unbind();
+            loadingLabel.visibleProperty().unbind();
+            loadingLabel.managedProperty().unbind();
+        });
+        new Thread(newsPipelineTask).start();
     }
 
     public void setHostServices(HostServices hostServices){

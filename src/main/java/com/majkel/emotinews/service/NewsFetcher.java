@@ -2,6 +2,7 @@ package com.majkel.emotinews.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.majkel.emotinews.adapter.BooleanPropertyAdapter;
 import com.majkel.emotinews.model.NewsHolder;
 import com.majkel.emotinews.config.ConfigLoader;
@@ -16,6 +17,7 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NewsFetcher {
@@ -30,20 +32,28 @@ public class NewsFetcher {
                     .header("X-Api-Key", ConfigLoader.getValue("api.news.key"))
                     .build();
             HttpResponse<String> getResponse=httpClient.send(getRequest, HttpResponse.BodyHandlers.ofString());
-            if(getResponse.statusCode()!=200)
-                throw new NewsApiException("Received status code "+getResponse.statusCode());
+
+            if (getResponse.statusCode() == 401 || getResponse.statusCode() == 403) {
+                throw new NewsApiException("Invalid or missing API key");
+            } else if(getResponse.statusCode()!=200)
+                throw new NewsApiException("NewsAPI request failed with status code "+getResponse.statusCode());
 
             NewsHolder response=gson.fromJson(getResponse.body(),NewsHolder.class);
             articles=response.getArticles();
-            System.out.println("Kod: "+response.getStatus());
 
-        }catch(URISyntaxException e){
-            throw new RuntimeException("URISyntaxException ",e);
-        }catch (InterruptedException | IOException e){
-            throw new NewsApiException("Error while calling NewsAPI",e);
+        } catch(URISyntaxException e){
+            throw new NewsApiException("Invalid API URL", e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new NewsApiException("Thread was interrupted while calling NewsAPI", e);
+        } catch(JsonSyntaxException e){
+            throw new NewsApiException("Invalid JSON received from NewsApi",e);
+        } catch (IOException e) {
+            throw new NewsApiException("I/O error while calling NewsAPI", e);
         }
-        if(articles!=null)
+
+        if(articles!=null && !articles.isEmpty())
             articles= CollectionUtils.filterValidNews(articles);
-        return articles!=null? articles:List.of();
+        return articles!=null?articles: new ArrayList<>();
     }
 }

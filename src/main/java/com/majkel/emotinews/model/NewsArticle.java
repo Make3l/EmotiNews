@@ -18,6 +18,35 @@ public class NewsArticle{
 
     private BooleanProperty favourite=new SimpleBooleanProperty(fav);
 
+    public NewsArticle(){}
+
+    public NewsArticle(String title, String description){
+        this.title=title;
+        this.description=description;
+    }
+
+    public static NewsArticle createFallBackNews(String errorMsg){
+        return new NewsArticle(
+                "Error: "+errorMsg,
+                "You are seeing this message because the app could not connect to the News API. Please check your internet connection and try again."
+        );
+    }
+
+    public static NewsArticle createAnalyzingNewsFallBackNews(String errorMsg){
+        return new NewsArticle(
+                "Error: "+errorMsg,
+                "The app could not process the news sentiment using the HuggingFace model. Sometimes it could be overloaded, don't worry and please try again later."
+        );
+    }
+
+    public static NewsArticle createDefaultNews(){
+        return new NewsArticle(
+                "Waiting for news to load :D",
+                "After news load this news will be replaced"
+        );
+    }
+
+
 
     public String getPublishedAt() {
         return publishedAt;
