@@ -50,6 +50,12 @@ public class MainViewController {
     @FXML
     private Button searchButton;
 
+    @FXML
+    private ProgressIndicator loadingSpinner;
+
+    @FXML
+    private Label loadingLabel;
+
     private String currentTopic="technology";//current topic, default=technology
 
     private Consumer<Callback> callbackConsumer;
@@ -73,16 +79,28 @@ public class MainViewController {
                 return NewsPipeline.loadNews();
             }
         };
+        loadingSpinner.visibleProperty().bind(task.runningProperty());
+        loadingSpinner.managedProperty().bind(task.runningProperty());
+        loadingLabel.visibleProperty().bind(task.runningProperty());
+        loadingLabel.managedProperty().bind(task.runningProperty());
         task.setOnSucceeded(e->{
             allNews=task.getValue();
             Platform.runLater(()->callbackConsumer.accept(new Callback(currentTopic,allNews)));
             syncFavouritesWithAllNews();
             display(allNews);
+            loadingSpinner.visibleProperty().unbind();
+            loadingSpinner.managedProperty().unbind();
+            loadingLabel.visibleProperty().unbind();
+            loadingLabel.managedProperty().unbind();
         });
         task.setOnFailed(e->{
             Throwable ex = task.getException();
             System.err.println("Failed at newsPipelineTask: " + ex.getMessage());
             ex.printStackTrace();
+            loadingSpinner.visibleProperty().unbind();
+            loadingSpinner.managedProperty().unbind();
+            loadingLabel.visibleProperty().unbind();
+            loadingLabel.managedProperty().unbind();
         });
         new Thread(task).start();
 
@@ -223,6 +241,13 @@ public class MainViewController {
                 return NewsPipeline.loadNews(topicField.getText());
             }
         };
+
+        loadingSpinner.visibleProperty().bind(newsPipelineTask.runningProperty());
+        loadingSpinner.managedProperty().bind(newsPipelineTask.runningProperty());
+        searchButton.disableProperty().bind(newsPipelineTask.runningProperty());
+        loadingLabel.visibleProperty().bind(newsPipelineTask.runningProperty());
+        loadingLabel.managedProperty().bind(newsPipelineTask.runningProperty());
+
         newsPipelineTask.setOnSucceeded(e->{
             allNews=newsPipelineTask.getValue();
             currentTopic=topicField.getText();
@@ -231,12 +256,22 @@ public class MainViewController {
             display(allNews);
             topicField.clear();
             newsPipelineTask=null;
+            loadingSpinner.visibleProperty().unbind();
+            loadingSpinner.managedProperty().unbind();
+            searchButton.disableProperty().unbind();
+            loadingLabel.visibleProperty().unbind();
+            loadingLabel.managedProperty().unbind();
         });
         newsPipelineTask.setOnFailed(e->{
             Throwable ex = newsPipelineTask.getException();
             System.err.println("Failed at newsPipelineTask: " + ex.getMessage());
             ex.printStackTrace();
             newsPipelineTask=null;
+            loadingSpinner.visibleProperty().unbind();
+            loadingSpinner.managedProperty().unbind();
+            searchButton.disableProperty().unbind();
+            loadingLabel.visibleProperty().unbind();
+            loadingLabel.managedProperty().unbind();
         });
         new Thread(newsPipelineTask).start();
     }
