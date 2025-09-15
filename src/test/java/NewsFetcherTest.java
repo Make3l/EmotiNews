@@ -21,7 +21,7 @@ public class NewsFetcherTest {
 
     private HttpClientPort httpClient;
     private NewsFetcher newsFetcher;
-    HttpResponse<String> response;
+    private HttpResponse<String> response;
 
     @BeforeEach
     public void setUp(){
@@ -46,7 +46,7 @@ public class NewsFetcherTest {
 
     @ParameterizedTest
     @ValueSource(ints = {401, 301, 400})
-    public void testNewsParsingException(int statusCodeNumber) throws Exception{
+    public void testWrongStatusCodes(int statusCodeNumber) throws Exception{
         when(response.statusCode()).thenReturn(statusCodeNumber);
 
         when(httpClient.send(any())).thenReturn(response);

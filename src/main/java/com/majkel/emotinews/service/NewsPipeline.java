@@ -51,7 +51,7 @@ public class NewsPipeline {
 
         List<NewsWithEmotions>newsWithEmotions=null;
 
-        EmotionsAnalyzer emotionsAnalyzer=new EmotionsAnalyzer();
+        EmotionsAnalyzer emotionsAnalyzer=new EmotionsAnalyzer(new HttpClientWrapper(HttpClient.newHttpClient()),ConfigLoader.getValue("api.huggingface.emotions.analizer"));
         try {
             List<TextEmotion> emotions = emotionsAnalyzer.parseArticles(lSting);
             newsWithEmotions=CollectionUtils.toNewsWithEmotionsList(articles,emotions);

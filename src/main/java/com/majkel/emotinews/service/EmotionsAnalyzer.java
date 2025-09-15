@@ -1,6 +1,7 @@
 package com.majkel.emotinews.service;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.majkel.emotinews.config.ConfigLoader;
 import com.majkel.emotinews.exception.NewsApiException;
@@ -22,14 +23,15 @@ import java.util.List;
 
 public class EmotionsAnalyzer {
 
-    private final static HttpClient httpClient=HttpClient.newHttpClient();
+    private final HttpClientPort httpClient;
+    private final String apiKey;
+
+    public EmotionsAnalyzer(HttpClientPort httpClient, String apiKey){
+        this.httpClient=httpClient;
+        this.apiKey=apiKey;
+    }
 
     public List<TextEmotion> parseArticles(List<String> news) throws HttpTimeoutException{
-        try {
-            Thread.currentThread().sleep(10000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         if(news==null || news.isEmpty())
             return new ArrayList<>();
         List<TextEmotion> emotionsList=null;
@@ -38,11 +40,11 @@ public class EmotionsAnalyzer {
             HttpRequest httpPost = HttpRequest.newBuilder()
                     .uri(new URI("https://api-inference.huggingface.co/models/cardiffnlp/twitter-roberta-base-sentiment"))
                     .POST(HttpRequest.BodyPublishers.ofString("{\n" + "\"inputs\": " + gson.toJson(news) + "\n}"))
-                    .header("Authorization", ConfigLoader.getValue("api.huggingface.emotions.analizer"))
+                    .header("Authorization", apiKey)
                     .header("Content-Type", "application/json")
                     .timeout(Duration.ofSeconds(35))
                     .build();
-            HttpResponse<String> stringHttpResponse = httpClient.send(httpPost, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> stringHttpResponse = httpClient.send(httpPost);
 
             if (stringHttpResponse.statusCode() == 401 || stringHttpResponse.statusCode() == 403) {
                 throw new ParsingNewsApiException("Invalid or missing API key");
@@ -53,11 +55,14 @@ public class EmotionsAnalyzer {
 
             Type type = new TypeToken<List<List<TextEmotion>>>() {}.getType();
             List<List<TextEmotion>> parsed = gson.fromJson(stringHttpResponse.body(), type);
-            emotionsList = parsed.get(0);
+            if(parsed!=null)
+                emotionsList = parsed.get(0);
         } catch (HttpTimeoutException e){
             throw e;
         } catch(URISyntaxException e){
             throw new RuntimeException("URISyntaxException ",e);
+        } catch(JsonSyntaxException e) {
+            throw new ParsingNewsApiException("Invalid JSON received from HuggingFace API", e);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new ParsingNewsApiException("Thread interrupted while calling HuggingFace API", e);
