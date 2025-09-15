@@ -1,5 +1,7 @@
 package com.majkel.emotinews.service;
 
+import com.majkel.emotinews.adapter.HttpClientWrapper;
+import com.majkel.emotinews.config.ConfigLoader;
 import com.majkel.emotinews.exception.NewsApiException;
 import com.majkel.emotinews.exception.ParsingNewsApiException;
 import com.majkel.emotinews.model.NewsArticle;
@@ -7,6 +9,7 @@ import com.majkel.emotinews.model.NewsWithEmotions;
 import com.majkel.emotinews.model.TextEmotion;
 import com.majkel.emotinews.utils.CollectionUtils;
 
+import java.net.http.HttpClient;
 import java.net.http.HttpTimeoutException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,7 +18,7 @@ import java.util.List;
 public class NewsPipeline {
 
     private static List<NewsWithEmotions>load(boolean option,String tag){
-        NewsFetcher newsFetcher=new NewsFetcher();
+        NewsFetcher newsFetcher=new NewsFetcher(new HttpClientWrapper(HttpClient.newHttpClient()),ConfigLoader.getValue("api.news.key"));
         List<NewsArticle>articles=null;
 
         if(option)//true and false to differ to "modes"

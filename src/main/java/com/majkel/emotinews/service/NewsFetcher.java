@@ -3,6 +3,7 @@ package com.majkel.emotinews.service;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.majkel.emotinews.adapter.BooleanPropertyAdapter;
 import com.majkel.emotinews.model.NewsHolder;
 import com.majkel.emotinews.config.ConfigLoader;
@@ -12,6 +13,7 @@ import com.majkel.emotinews.utils.CollectionUtils;
 import javafx.beans.property.BooleanProperty;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
@@ -21,7 +23,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NewsFetcher {
-    private static final HttpClient httpClient=HttpClient.newHttpClient();
+
+    private final HttpClientPort httpClient;
+    private final String apiKey;
+
+    public NewsFetcher(HttpClientPort httpClient, String apiKey){
+        this.httpClient=httpClient;
+        this.apiKey=apiKey;
+    }
+
 
     public List<NewsArticle> getNewsList(String query){
         Gson gson= new GsonBuilder().registerTypeAdapter(BooleanProperty.class,new  BooleanPropertyAdapter()).create();
@@ -29,9 +39,9 @@ public class NewsFetcher {
         try {
             HttpRequest getRequest = HttpRequest.newBuilder()
                     .uri(new URI("https://newsapi.org/v2/"+query+"language=en"))
-                    .header("X-Api-Key", ConfigLoader.getValue("api.news.key"))
+                    .header("X-Api-Key", apiKey)
                     .build();
-            HttpResponse<String> getResponse=httpClient.send(getRequest, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> getResponse=httpClient.send(getRequest);
 
             if (getResponse.statusCode() == 401 || getResponse.statusCode() == 403) {
                 throw new NewsApiException("Invalid or missing API key");
@@ -39,7 +49,8 @@ public class NewsFetcher {
                 throw new NewsApiException("NewsAPI request failed with status code "+getResponse.statusCode());
 
             NewsHolder response=gson.fromJson(getResponse.body(),NewsHolder.class);
-            articles=response.getArticles();
+            if(response!=null)
+                articles=response.getArticles();
 
         } catch(URISyntaxException e){
             throw new NewsApiException("Invalid API URL", e);

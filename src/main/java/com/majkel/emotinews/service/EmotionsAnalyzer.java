@@ -51,8 +51,7 @@ public class EmotionsAnalyzer {
             } else if(stringHttpResponse.statusCode()!=200)
                 throw new ParsingNewsApiException("Received status code " + stringHttpResponse.statusCode());
 
-            Type type = new TypeToken<List<List<TextEmotion>>>() {
-            }.getType();
+            Type type = new TypeToken<List<List<TextEmotion>>>() {}.getType();
             List<List<TextEmotion>> parsed = gson.fromJson(stringHttpResponse.body(), type);
             emotionsList = parsed.get(0);
         } catch (HttpTimeoutException e){
