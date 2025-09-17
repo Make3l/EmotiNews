@@ -40,7 +40,7 @@ public class NewsPipeline {
             return list;
         }
 
-        if(articles==null || articles.isEmpty())
+        if(articles.isEmpty())
             return new ArrayList<>();
 
         if(articles.size()>20)
@@ -52,6 +52,8 @@ public class NewsPipeline {
 
         try {
             List<TextEmotion> emotions = emotionsAnalyzer.parseArticles(lSting);
+            if(emotions.isEmpty())
+                return new ArrayList<>();
             newsWithEmotions=CollectionUtils.toNewsWithEmotionsList(articles,emotions);
         } catch (HttpTimeoutException e) { // added 3 catches that do the same in order to be easier to overwrite(each individually) in future
             newsWithEmotions=new ArrayList<>();
