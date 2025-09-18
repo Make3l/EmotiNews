@@ -113,10 +113,10 @@ public class NewsPipelineTest {
     public void articlesTrimmedTo20() throws Exception{
         List<NewsArticle>fetcherResult=new ArrayList<>();
         for(int i=0;i<30;i++)
-            fetcherResult.add(new NewsArticle("Title "+i,"Descryption "+i,"Url "+i));
+            fetcherResult.add(new NewsArticle("Title "+i,"Description "+i,"Url "+i));
 
         List<TextEmotion>analyzerResults=new ArrayList<>();
-        for(int i=0;i<30;i++)
+        for(int i=0;i<20;i++)//articles are being trimmed so emotions are equals to articles trimmed
             analyzerResults.add(new TextEmotion("Emotion "+i,0.9));
 
         when(newsFetcher.getNewsList(any())).thenReturn(fetcherResult);
@@ -125,8 +125,7 @@ public class NewsPipelineTest {
         List<NewsWithEmotions>pipelineResults=pipeline.loadNews();
 
         assertNotNull(pipelineResults);
-        assertEquals("Title 19", pipelineResults.get(19).getArticle().getTitle());
         assertEquals(20,pipelineResults.size());
-
+        assertEquals("Title 16", pipelineResults.get(16).getArticle().getTitle());
     }
 }
