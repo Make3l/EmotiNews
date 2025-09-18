@@ -1,5 +1,3 @@
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSyntaxException;
 import com.majkel.emotinews.exception.NewsApiException;
 import com.majkel.emotinews.model.NewsArticle;
 import com.majkel.emotinews.service.HttpClientPort;

@@ -1,7 +1,5 @@
 package com.majkel.emotinews.service;
 
-import com.majkel.emotinews.adapter.HttpClientWrapper;
-import com.majkel.emotinews.config.ConfigLoader;
 import com.majkel.emotinews.exception.NewsApiException;
 import com.majkel.emotinews.exception.ParsingNewsApiException;
 import com.majkel.emotinews.model.NewsArticle;
@@ -9,7 +7,6 @@ import com.majkel.emotinews.model.NewsWithEmotions;
 import com.majkel.emotinews.model.TextEmotion;
 import com.majkel.emotinews.utils.CollectionUtils;
 
-import java.net.http.HttpClient;
 import java.net.http.HttpTimeoutException;
 import java.time.LocalDate;
 import java.util.ArrayList;

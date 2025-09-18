@@ -3,17 +3,13 @@ package com.majkel.emotinews.service;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.majkel.emotinews.config.ConfigLoader;
-import com.majkel.emotinews.exception.NewsApiException;
 import com.majkel.emotinews.exception.ParsingNewsApiException;
-import com.majkel.emotinews.model.NewsWithEmotions;
 import com.majkel.emotinews.model.TextEmotion;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpTimeoutException;

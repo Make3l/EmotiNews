@@ -1,6 +1,5 @@
 package com.majkel.emotinews.model;
 
-import com.google.gson.annotations.Expose;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
