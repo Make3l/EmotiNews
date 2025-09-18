@@ -1,6 +1,5 @@
 package com.majkel.emotinews.model;
 
-import org.w3c.dom.Text;
 
 public class TextEmotion {
     private String label;
