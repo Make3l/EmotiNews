@@ -1,6 +1,5 @@
 package com.majkel.emotinews.model;
 
-import com.google.gson.annotations.Expose;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
@@ -20,29 +19,33 @@ public class NewsArticle{
 
     public NewsArticle(){}
 
-    public NewsArticle(String title, String description){
+    public NewsArticle(String title, String description, String url){
         this.title=title;
         this.description=description;
+        this.url=url;
     }
 
     public static NewsArticle createFallBackNews(String errorMsg){
         return new NewsArticle(
                 "Error: "+errorMsg,
-                "You are seeing this message because the app could not connect to the News API. Please check your internet connection and try again."
+                "You are seeing this message because the app could not connect to the News API. Please check your internet connection and try again.",
+                "Url"
         );
     }
 
     public static NewsArticle createAnalyzingNewsFallBackNews(String errorMsg){
         return new NewsArticle(
                 "Error: "+errorMsg,
-                "The app could not process the news sentiment using the HuggingFace model. Sometimes it could be overloaded, don't worry and please try again later."
+                "The app could not process the news sentiment using the HuggingFace model. Sometimes it could be overloaded, don't worry and please try again later.",
+                "Url"
         );
     }
 
     public static NewsArticle createDefaultNews(){
         return new NewsArticle(
                 "Waiting for news to load :D",
-                "After news load this news will be replaced"
+                "After news load this news will be replaced",
+                "Url"
         );
     }
 

@@ -1,9 +1,13 @@
 package com.majkel.emotinews.ui.controller;
 
+import com.majkel.emotinews.adapter.HttpClientWrapper;
+import com.majkel.emotinews.config.ConfigLoader;
 import com.majkel.emotinews.model.Callback;
 import com.majkel.emotinews.model.CallbackFav;
 import com.majkel.emotinews.model.NewsArticle;
 import com.majkel.emotinews.model.NewsWithEmotions;
+import com.majkel.emotinews.service.EmotionsAnalyzer;
+import com.majkel.emotinews.service.NewsFetcher;
 import com.majkel.emotinews.service.NewsPipeline;
 import javafx.animation.PauseTransition;
 import javafx.application.HostServices;
@@ -19,6 +23,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
+import java.net.http.HttpClient;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -76,7 +81,8 @@ public class MainViewController {
         Task<List<NewsWithEmotions>>task=new Task<>() {
             @Override
             protected List<NewsWithEmotions> call() throws Exception{
-                return NewsPipeline.loadNews();
+
+                return new NewsPipeline(new NewsFetcher(new HttpClientWrapper(HttpClient.newHttpClient()),ConfigLoader.getValue("api.news.key")),new EmotionsAnalyzer(new HttpClientWrapper(HttpClient.newHttpClient()), ConfigLoader.getValue("api.huggingface.emotions.analizer"))).loadNews();
             }
         };
         loadingSpinner.visibleProperty().bind(task.runningProperty());
@@ -238,7 +244,7 @@ public class MainViewController {
         newsPipelineTask=new Task<>() {
             @Override
             protected List<NewsWithEmotions> call() throws Exception{
-                return NewsPipeline.loadNews(topicField.getText());
+                return new NewsPipeline(new NewsFetcher(new HttpClientWrapper(HttpClient.newHttpClient()),ConfigLoader.getValue("api.news.key")),new EmotionsAnalyzer(new HttpClientWrapper(HttpClient.newHttpClient()), ConfigLoader.getValue("api.huggingface.emotions.analizer"))).loadNews(topicField.getText());
             }
         };
 

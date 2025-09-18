@@ -14,31 +14,30 @@ import java.util.List;
 
 public class NewsPipeline {
 
-    private static List<NewsWithEmotions>load(boolean option,String tag){
-        NewsFetcher newsFetcher=new NewsFetcher();
+    private NewsFetcher newsFetcher;
+    private EmotionsAnalyzer emotionsAnalyzer;
+
+    public NewsPipeline(NewsFetcher newsFetcher,EmotionsAnalyzer emotionsAnalyzer){
+        this.newsFetcher=newsFetcher;
+        this.emotionsAnalyzer=emotionsAnalyzer;
+    }
+
+    private List<NewsWithEmotions>load(boolean option,String tag){
         List<NewsArticle>articles=null;
 
-        if(option)//true and false to differ to "modes"
-        {
-            LocalDate localDate=LocalDate.now();
-            try{
-                articles = newsFetcher.getNewsList("everything?q="+tag+"&from="+localDate.minusDays(2)+"&sortBy=popularity");
-            }catch (NewsApiException e){
-                List<NewsWithEmotions> list=new ArrayList<>();
-                list.add(new NewsWithEmotions("LABEL_0",NewsArticle.createFallBackNews(e.getMessage())));
-                return list;
+        try {
+            if (option) {//true and false to differ to "modes"
+                articles = newsFetcher.getNewsList("everything?q=" + tag + "&from=" + LocalDate.now().minusDays(2) + "&sortBy=popularity");
+            } else {
+                articles = newsFetcher.getNewsList("everything?q=technology&from=" + LocalDate.now().minusDays(4));
             }
-        }else{
-            try{
-                articles = newsFetcher.getNewsList("everything?q=technology&from="+LocalDate.now().minusDays(4));
-            }catch (NewsApiException e){
-                List<NewsWithEmotions> list=new ArrayList<>();
-                list.add(new NewsWithEmotions("LABEL_0",NewsArticle.createFallBackNews(e.getMessage())));
-                return list;
-            }
+        } catch (NewsApiException e) {
+            List<NewsWithEmotions> list = new ArrayList<>();
+            list.add(new NewsWithEmotions("LABEL_0", NewsArticle.createFallBackNews(e.getMessage())));
+            return list;
         }
 
-        if(articles==null)
+        if(articles.isEmpty())
             return new ArrayList<>();
 
         if(articles.size()>20)
@@ -48,11 +47,12 @@ public class NewsPipeline {
 
         List<NewsWithEmotions>newsWithEmotions=null;
 
-        EmotionsAnalyzer emotionsAnalyzer=new EmotionsAnalyzer();
         try {
             List<TextEmotion> emotions = emotionsAnalyzer.parseArticles(lSting);
+            if(emotions.isEmpty())
+                return new ArrayList<>();
             newsWithEmotions=CollectionUtils.toNewsWithEmotionsList(articles,emotions);
-        } catch (HttpTimeoutException e) { // added 3 catch that do the same in order be easier to overwrite in future
+        } catch (HttpTimeoutException e) { // added 3 catches that do the same in order to be easier to overwrite(each individually) in future
             newsWithEmotions=new ArrayList<>();
             newsWithEmotions.add(new NewsWithEmotions("LABEL_0",NewsArticle.createAnalyzingNewsFallBackNews("Request to HuggingFace timed out")));
         } catch (ParsingNewsApiException e){
@@ -67,11 +67,11 @@ public class NewsPipeline {
 
     }
 
-    public static List<NewsWithEmotions> loadNews(String tag){
+    public List<NewsWithEmotions> loadNews(String tag){
         return load(true,tag);//true and false to differ to "modes"
     }
 
-    public static List<NewsWithEmotions> loadNews(){
+    public List<NewsWithEmotions> loadNews(){
         return load(false,"");//true and false to differ to "modes"
     }
 
