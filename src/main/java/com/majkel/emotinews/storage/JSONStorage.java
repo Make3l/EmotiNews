@@ -26,6 +26,8 @@ public class JSONStorage {
             .create();
 
     public static void save(File file,List<NewsWithEmotions> news) throws IOException{
+        if(news==null || news.isEmpty())
+            return;
         try(FileWriter fileWriter=new FileWriter(file)){
             gson.toJson(news,fileWriter);
         }
@@ -39,7 +41,7 @@ public class JSONStorage {
         }
     }
 
-    public static List<NewsWithEmotions> load(File file) throws IOException{
+    public static List<NewsWithEmotions> load(File file) throws JsonSyntaxException,IOException{
         try(FileReader fileReader=new FileReader(file)){
             Type type=new TypeToken<List<NewsWithEmotions>>(){}.getType();
             List<NewsWithEmotions>list= gson.fromJson(fileReader,type);
