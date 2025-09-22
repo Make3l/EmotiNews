@@ -1,0 +1,28 @@
+[
+  {
+    "emotion": "Positive",
+    "article": {
+      "author": "Author 1",
+      "title": "Sample Title 1",
+      "description": "Short description 1",
+      "url": "https://example.com/article1",
+      "publishedAt": "2025-09-11T19:59:28Z",
+      "content": "Content 1...",
+      "fav": true,
+      "favourite": true
+    }
+  },
+  {
+    "emotion": "Negative",
+    "article": {
+      "author": "Author 2",
+      "title": "Sample Title 2",
+      "description": "Short description 2",
+      "url": "https://example.com/article2",
+      "publishedAt": "2025-08-30T16:50:15Z",
+      "content": "Content 2...",
+      "fav": true,
+      "favourite": true
+    }
+  }
+]
