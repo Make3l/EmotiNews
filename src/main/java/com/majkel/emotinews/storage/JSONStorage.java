@@ -25,7 +25,9 @@ public class JSONStorage {
             .setPrettyPrinting()
             .create();
 
-    public static void save(File file,List<NewsWithEmotions> news) throws JsonSyntaxException,IOException{
+    public static void save(File file,List<NewsWithEmotions> news) throws IOException{
+        if(news==null || news.isEmpty())
+            return;
         try(FileWriter fileWriter=new FileWriter(file)){
             gson.toJson(news,fileWriter);
         }
