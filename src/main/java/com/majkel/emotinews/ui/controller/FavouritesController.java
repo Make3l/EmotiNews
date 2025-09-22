@@ -20,6 +20,7 @@ import java.io.ObjectInputFilter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class FavouritesController {
 
@@ -47,6 +48,12 @@ public class FavouritesController {
 
     @FXML
     private Hyperlink newsLink;
+
+    @FXML
+    private Button searchButton;
+
+    @FXML
+    private TextField phraseField;
 
     @FXML
     public void initialize(){
@@ -169,5 +176,15 @@ public class FavouritesController {
 
     public void setCallbackFavList(Consumer<List<NewsWithEmotions>>callbackFavList){
         this.callbackFavList=callbackFavList;
+    }
+
+    @FXML
+    private void searchFavourites(){
+        String searchedPhase=phraseField.getText().trim().toLowerCase();
+        if(searchedPhase.isEmpty()){
+            display(favAllList);
+            return;
+        }
+        display(favAllList.stream().filter(e-> e.getArticle().getTitle().toLowerCase().contains(searchedPhase)).collect(Collectors.toList()));
     }
 }

@@ -1,26 +1,25 @@
 [
   {
-    "emotion": "LABEL_0",
+    "emotion": "LABEL_1",
     "article": {
-      "author": "Justine Calma",
-      "title": "Trump administration suspends FEMA employees who warned about disaster response",
-      "description": "FEMA has suspended at least 30 employees after they warned that spending limits, staffing cuts, and gaps in leadership hurt the agency’s ability to respond to disasters. The employees received emails notifying them that they’d been put on administrative leave…",
-      "url": "https://www.theverge.com/news/766890/trump-fema-employees-suspended-letter",
-      "publishedAt": "2025-08-27T18:37:15Z",
-      "content": "\u003cul\u003e\u003cli\u003e\u003c/li\u003e\u003cli\u003e\u003c/li\u003e\u003cli\u003e\u003c/li\u003e\u003c/ul\u003e\r\nThe letter urges Congress to take action to stop the Trump administration from dismantling FEMA and prevent another national catastrophe like Hurricane Katrina.\r… [+2686 chars]",
+      "author": "Zeyi Yang, Louise Matsakis",
+      "title": "How China’s Propaganda and Surveillance Systems Really Operate",
+      "description": "A series of corporate leaks show that Chinese technology companies function far more like their Western peers than one might imagine.",
+      "url": "https://www.wired.com/story/made-in-china-how-chinas-surveillance-industry-actually-works/",
+      "publishedAt": "2025-09-11T19:59:28Z",
+      "content": "A trove of internal documents leaked from a little-known Chinese company has pulled back the curtain on how digital censorship tools are being marketed and exported globally. Geedge Networks sells wh… [+4232 chars]",
       "fav": true,
       "favourite": true
     }
   },
   {
-    "emotion": "LABEL_0",
+    "emotion": "LABEL_2",
     "article": {
-      "author": "Ben Collins",
-      "title": "Trump and the NFL - why it\u0027s complicated",
-      "description": "After a lawsuit and many failed team bids, Donald Trump looked to have ended his 40-year feud with the NFL - but is their relationship set for another twist?",
-      "url": "https://www.bbc.com/sport/american-football/articles/cp82l659dero",
-      "publishedAt": "2025-08-28T09:29:58Z",
-      "content": "Already a real-estate magnate by that point, Trump viewed owning an American football team as a means of building his brand. After attempting to acquire an NFL franchise, a 37-year-old Trump bought t… [+1733 chars]",
+      "title": "AI stethoscope could detect major heart conditions in seconds",
+      "description": "The new technology could be a \"game-changer\" resulting in patients being treated sooner, experts say.",
+      "url": "https://www.bbc.com/news/articles/c2l748k0y77o",
+      "publishedAt": "2025-08-30T16:50:15Z",
+      "content": "Stethoscopes powered by artificial intelligence (AI) could help detect three different heart conditions in seconds, researchers say.\r\nThe original stethoscope, invented in 1816, allows doctors to lis… [+1992 chars]",
       "fav": true,
       "favourite": true
     }
@@ -28,12 +27,11 @@
   {
     "emotion": "LABEL_1",
     "article": {
-      "author": "Eric Berger, Ars Technica",
-      "title": "A Secretive US Space Plane Will Soon Test Quantum Navigation Technology",
-      "description": "The space plane’s test flight will advance development of a new navigation technology based on electromagnetic wave interference.",
-      "url": "https://www.wired.com/story/a-secretive-space-plane-is-set-to-launch-and-test-quantum-navigation-technology/",
-      "publishedAt": "2025-07-29T14:30:00Z",
-      "content": "The X-37B, the US Space Forces secretive space plane, will soon take flight again.\r\nOn Monday, the Space Force announced that it will fly the small, Space Shuttleshaped vehicle on the programs eighth… [+3255 chars]",
+      "title": "The hidden group that loses COVID protection fast",
+      "description": "Why do some people stay protected after vaccination while others quickly lose immunity? Researchers in Japan tracked over 2,500 people for 18 months and found four distinct immune response patterns. The so-called “rapid-decliners” looked strong at first but l…",
+      "url": "https://www.sciencedaily.com/releases/2025/09/250917221001.htm",
+      "publishedAt": "2025-09-18T13:00:27Z",
+      "content": "Two healthcare workers get COVID-19 vaccinations on the same day. Both show strong antibody responses initially, but six months later one stays healthy while the other contracts the virus. A new stud… [+4513 chars]",
       "fav": true,
       "favourite": true
     }
@@ -41,11 +39,12 @@
   {
     "emotion": "LABEL_1",
     "article": {
-      "title": "No. 2 Swiatek struggles, but extends major streak",
-      "description": "Iga Swiatek, the No. 2 seed, eked past Suzan Lamens at the US Open to again reach the third round, which she has done at every Slam event since the start of 2020.",
-      "url": "https://www.espn.com/tennis/story/_/id/46097551/us-open-iga-swiatek-reaches-3rd-round-extend-major-streak",
-      "publishedAt": "2025-08-28T19:35:11Z",
-      "content": "Aug 28, 2025, 03:20 PM ET\r\nWhen it comes to Iga Swiatek reaching the third round of a major, you may as well put it in ink.\r\nSwiatek, the No. 2 seed from Poland, struggled Thursday but got past world… [+1985 chars]",
+      "author": "Ion-Daniel Contescu",
+      "title": "Sorana Cîrstea i-a luat doar cinci game-uri Igăi Swiatek. Poloneza i-a administrat bătăi pe bandă rulantă",
+      "description": "Sorana Cîrstea, 35 de ani, ia în calcul retragerea din tenis la finalul acestui sezon.",
+      "url": "https://adevarul.ro/sport/sorana-cirstea-i-a-luat-doar-cinci-game-uri-igai-2472909.html",
+      "publishedAt": "2025-09-18T09:10:06Z",
+      "content": "Dup victoria facil din primul tur cu Anastasia Zakharova (scor 6-3, 6-1), juctoarea românc de tenis Sorana Cârstea (35 de ani, 66 WTA) a dat peste o nuc tare în turul secund (optimile de final) al tu… [+497 chars]",
       "fav": true,
       "favourite": true
     }
@@ -53,12 +52,38 @@
   {
     "emotion": "LABEL_1",
     "article": {
-      "author": "Riley Gutiérrez McDermid",
-      "title": "Musk Stakes Tesla Future on One Major Gamble",
-      "description": "Will it become the next commonly adopted technology after EVs and smartphones?",
-      "url": "https://gizmodo.com/musk-optimus-robots-2000653481",
-      "publishedAt": "2025-09-04T14:40:08Z",
-      "content": "In a striking shift of narrative, Elon Musk has declared that Teslas future valuation will derive 80% from its Optimus humanoid robots, not its electric vehicle business.\r\nThis declaration, made in t… [+4149 chars]",
+      "author": "Bartosz Królikowski",
+      "title": "Kiedy gra Iga Świątek w Seulu? Gdzie oglądać mecz? [TRANSMISJA NA ŻYWO]",
+      "description": "Koniec odpoczynku po US Open, czas wracać do gry. Iga Świątek rozpoczyna swój tour po Dalekim Wschodzie, a dokładniej mówiąc, zaczyna go w Seulu. W stolicy Korei Południowej jest rozstawiona z nr 1 i będzie główną faworytką do wygrania całości. Jej pierwszą p…",
+      "url": "https://www.sport.pl/tenis/7,64987,32259831,kiedy-gra-iga-swiatek-w-seulu-gdzie-ogladac-mecz-transmisja.html",
+      "publishedAt": "2025-09-18T05:39:00Z",
+      "content": "Po zakończonym dla Polki na ćwierćfinale US Open mieliśmy nieco obaw dotyczących jej zdrowia. Okazało się, że Świątek zmagała się z urazem stopy. Nie na tyle poważnym, by uniemożliwić jej granie, ale… [+1880 chars]",
+      "fav": true,
+      "favourite": true
+    }
+  },
+  {
+    "emotion": "LABEL_1",
+    "article": {
+      "author": "Petre Apostol",
+      "title": "Optimile turneului WTA 500 de la Seul: Sorana Cîrstea, eliminată de Iga Swiatek, locul 2 mondial",
+      "description": "Mediafax\nJucătoarea română de tenis Sorana Cîrstea (locul 66 WTA) a fost eliminată, joi, în optimile de finală ale turneului WTA 500 de la Seul (Coreea de Sud), de poloneza Iga Swiatek, locul 2 mondial.\nArticolul Optimile turneului WTA 500 de la Seul: Sorana …",
+      "url": "https://www.mediafax.ro/sport/optimile-turneului-wta-500-de-la-seul-sorana-cirstea-eliminata-de-iga-swiatek-locul-2-mondial-23612439",
+      "publishedAt": "2025-09-18T09:26:37Z",
+      "content": "Poloneza, principala favorit a turneului, s-a impus în dou seturi, scor 6-3, 6-2, la finalul unui meci care a durat o or i 34 de minute.\r\nSwiatek a dominat meciul la toate capitolele: a servit 4 ai, … [+315 chars]",
+      "fav": true,
+      "favourite": true
+    }
+  },
+  {
+    "emotion": "LABEL_1",
+    "article": {
+      "author": "Sean Hollister",
+      "title": "Nvidia and Intel’s $5 billion deal is apparently about eating AMD’s lunch",
+      "description": "Today, Nvidia CEO Jensen Huang and Intel CEO Lip-Bu Tan held a joint webcast to explain just why the world\u0027s most valuable company (Nvidia\u0027s at $4.28 trillion) is throwing a $5 billion lifeline to a struggling competitor. Nvidia quickly shut down several poss…",
+      "url": "https://www.theverge.com/report/781330/nvidia-intel-explain-5-billion-deal-jensen-huang-lip-bu-tan-amd",
+      "publishedAt": "2025-09-18T20:15:36Z",
+      "content": "\u003cul\u003e\u003cli\u003e\u003c/li\u003e\u003cli\u003e\u003c/li\u003e\u003cli\u003e\u003c/li\u003e\u003c/ul\u003e\r\nNot about Trump, not about US manufacturing, the CEOs say.\r\nNot about Trump, not about US manufacturing, the CEOs say.\r\nby\r\nSean HollisterClose\r\nSean Hollister\r\n… [+7527 chars]",
       "fav": true,
       "favourite": true
     }
