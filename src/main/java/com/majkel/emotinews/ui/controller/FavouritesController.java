@@ -179,10 +179,12 @@ public class FavouritesController {
     }
 
     @FXML
-    private void searchFavourites(){//TODO sometimes work sometimes doesn't
-        String searchedPhase=phraseField.getText().trim();
-        if(searchedPhase.isEmpty())
+    private void searchFavourites(){
+        String searchedPhase=phraseField.getText().trim().toLowerCase();
+        if(searchedPhase.isEmpty()){
+            display(favAllList);
             return;
+        }
         display(favAllList.stream().filter(e-> e.getArticle().getTitle().toLowerCase().contains(searchedPhase)).collect(Collectors.toList()));
     }
 }
