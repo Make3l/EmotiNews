@@ -38,7 +38,7 @@ public class NewsPipelineTest {
                 Arrays.asList(new NewsArticle("Title0","Descryption0","Url0"),new NewsArticle("Title1","Descryption1","Url1")));
         List<TextEmotion> analizerResult=new ArrayList<>(Arrays.asList(new TextEmotion("Label0",0.9),new TextEmotion("Label1",0.9)));
 
-        when(newsFetcher.getNewsList(any())).thenReturn(fetcherResult);
+        when(newsFetcher.getNewsList(any(),any())).thenReturn(fetcherResult);
         when(emotionsAnalyzer.parseArticles(any())).thenReturn(analizerResult);
 
         List<NewsWithEmotions>pipelineResult=pipeline.loadNews();
@@ -48,8 +48,8 @@ public class NewsPipelineTest {
     }
 
     @Test
-    public void newsFetcherReturnedEmptyTest() throws Exception{
-        when(newsFetcher.getNewsList(any())).thenReturn(new ArrayList<>());
+    public void newsFetcherReturnedEmptyTest(){
+        when(newsFetcher.getNewsList(any(),any())).thenReturn(new ArrayList<>());
 
         List<NewsWithEmotions>pipelineResult=pipeline.loadNews();
 
@@ -61,7 +61,7 @@ public class NewsPipelineTest {
     public void emotionsAnalyzerReturnedEmptyTest() throws Exception{
         List<NewsArticle>fetcherResult=new ArrayList<>(
                 Arrays.asList(new NewsArticle("Title0","Descryption0","Url0"),new NewsArticle("Title1","Descryption1","Url1")));
-        when(newsFetcher.getNewsList(any())).thenReturn(fetcherResult);
+        when(newsFetcher.getNewsList(any(),any())).thenReturn(fetcherResult);
         when(emotionsAnalyzer.parseArticles(any())).thenReturn(new ArrayList<>());
 
         List<NewsWithEmotions>pipelineResult=pipeline.loadNews();
@@ -72,7 +72,7 @@ public class NewsPipelineTest {
 
     @Test
     public void newsFetcherThrowsNewsApiException() throws Exception{
-        when(newsFetcher.getNewsList(any())).thenThrow(new NewsApiException("Test exception"));
+        when(newsFetcher.getNewsList(any(),any())).thenThrow(new NewsApiException("Test exception"));
 
         List<NewsWithEmotions>pipelineResult=pipeline.loadNews();
 
@@ -85,7 +85,7 @@ public class NewsPipelineTest {
     public void emotionsAnalyzerThrowsHttpTimeoutException() throws Exception{
         List<NewsArticle>fetcherResult=new ArrayList<>(
                 Arrays.asList(new NewsArticle("Title0","Descryption0","Url0"),new NewsArticle("Title1","Descryption1","Url1")));
-        when(newsFetcher.getNewsList(any())).thenReturn(fetcherResult);
+        when(newsFetcher.getNewsList(any(),any())).thenReturn(fetcherResult);
         when(emotionsAnalyzer.parseArticles(any())).thenThrow(new HttpTimeoutException("test msg"));
 
         List<NewsWithEmotions>pipelineResult=pipeline.loadNews();
@@ -99,7 +99,7 @@ public class NewsPipelineTest {
     public void emotionsAnalyzerThrowsParsingNewsApiException() throws Exception{
         List<NewsArticle>fetcherResult=new ArrayList<>(
                 Arrays.asList(new NewsArticle("Title0","Descryption0","Url0"),new NewsArticle("Title1","Descryption1","Url1")));
-        when(newsFetcher.getNewsList(any())).thenReturn(fetcherResult);
+        when(newsFetcher.getNewsList(any(),any())).thenReturn(fetcherResult);
         when(emotionsAnalyzer.parseArticles(any())).thenThrow(new ParsingNewsApiException("Invalid JSON received from HuggingFace API"));
 
         List<NewsWithEmotions>pipelineResult=pipeline.loadNews();
@@ -119,7 +119,7 @@ public class NewsPipelineTest {
         for(int i=0;i<20;i++)//articles are being trimmed so emotions are equals to articles trimmed
             analyzerResults.add(new TextEmotion("Emotion "+i,0.9));
 
-        when(newsFetcher.getNewsList(any())).thenReturn(fetcherResult);
+        when(newsFetcher.getNewsList(any(),any())).thenReturn(fetcherResult);
         when(emotionsAnalyzer.parseArticles(any())).thenReturn(analyzerResults);
 
         List<NewsWithEmotions>pipelineResults=pipeline.loadNews();

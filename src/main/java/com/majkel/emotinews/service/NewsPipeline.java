@@ -10,12 +10,15 @@ import com.majkel.emotinews.utils.CollectionUtils;
 import java.net.http.HttpTimeoutException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NewsPipeline {
 
     private NewsFetcher newsFetcher;
     private EmotionsAnalyzer emotionsAnalyzer;
+    private final int MAX_NUMBER_OF_FETCHED_ARTICLES=20;
 
     public NewsPipeline(NewsFetcher newsFetcher,EmotionsAnalyzer emotionsAnalyzer){
         this.newsFetcher=newsFetcher;
@@ -24,24 +27,30 @@ public class NewsPipeline {
 
     private List<NewsWithEmotions>load(boolean option,String tag){
         List<NewsArticle>articles=null;
-
+        Map<String,String>urlPrams=new LinkedHashMap<>();
+        String urlPath="everything";
         try {
             if (option) {//true and false to differ to "modes"
-                articles = newsFetcher.getNewsList("everything?q=" + tag + "&from=" + LocalDate.now().minusDays(2) + "&sortBy=popularity");
+                urlPrams.put("q",tag);
+                urlPrams.put("from",LocalDate.now().minusDays(2).toString());
+                urlPrams.put("sortBy","popularity");
             } else {
-                articles = newsFetcher.getNewsList("everything?q=technology&from=" + LocalDate.now().minusDays(4));
+                urlPrams.put("q","technology");
+                urlPrams.put("from",LocalDate.now().minusDays(4).toString());
+                urlPrams.put("sortBy","popularity");
             }
+            articles=newsFetcher.getNewsList(urlPath,urlPrams);
         } catch (NewsApiException e) {
             List<NewsWithEmotions> list = new ArrayList<>();
             list.add(new NewsWithEmotions("LABEL_0", NewsArticle.createFallBackNews(e.getMessage())));
             return list;
         }
 
-        if(articles.isEmpty())
+        if(articles==null || articles.isEmpty())
             return new ArrayList<>();
 
-        if(articles.size()>20)
-            articles.subList(20,articles.size()).clear();
+        if(articles.size()>MAX_NUMBER_OF_FETCHED_ARTICLES)
+            articles.subList(MAX_NUMBER_OF_FETCHED_ARTICLES,articles.size()).clear();
 
         List<String>lSting= CollectionUtils.toStringList(articles);
 
