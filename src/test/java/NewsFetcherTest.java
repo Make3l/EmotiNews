@@ -9,7 +9,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
 import java.net.http.HttpResponse;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -31,35 +33,49 @@ public class NewsFetcherTest {
     @Test
     public void testFetchSuccess() throws Exception {
         String responseBody="{\"status\":\"ok\",\"totalResults\":2,\"articles\":[{\"source\":{\"id\":\"Id\",\"name\":\"Name\"},\"author\":\"Author\",\"title\":\"Title\",\"description\":\"Description\",\"url\":\"https://example.com/article1\",\"urlToImage\":\"https://example.com/image1.jpg\",\"publishedAt\":\"2025-09-14T12:00:00Z\",\"content\":\"Content of the article 1...\"},{\"source\":{\"id\":\"associated-press\",\"name\":\"Associated Press\"},\"author\":\"AP Reporter\",\"title\":\"Breaking News Title\",\"description\":\"Breaking news description...\",\"url\":\"https://apnews.com/example\",\"urlToImage\":\"https://apnews.com/image.jpg\",\"publishedAt\":\"2025-09-14T13:00:00Z\",\"content\":\"Full article content...\"}]}";
+        String urlPath="testUrlPath";
+        Map<String,String> urlParams=new LinkedHashMap<>();
+        urlParams.put("q","test");
+
         when(response.statusCode()).thenReturn(200);
         when(response.body()).thenReturn(responseBody);
 
         when(httpClient.send(any())).thenReturn(response);
 
-        List<NewsArticle>articles= newsFetcher.getNewsList("q=test");
+        List<NewsArticle>articles= newsFetcher.getNewsList(urlPath,urlParams);
+
         assertEquals(2,articles.size());
         assertEquals("Author", articles.get(0).getAuthor());
+
         verify(httpClient,times(1)).send(any());
     }
 
     @ParameterizedTest
     @ValueSource(ints = {401, 301, 400})
     public void testWrongStatusCodes(int statusCodeNumber) throws Exception{
+        String urlPath="testUrlPath";
+        Map<String,String> urlParams=new LinkedHashMap<>();
+        urlParams.put("q","test");
+
         when(response.statusCode()).thenReturn(statusCodeNumber);
 
         when(httpClient.send(any())).thenReturn(response);
 
-        assertThrows(NewsApiException.class,()->newsFetcher.getNewsList("q=test"));
+        assertThrows(NewsApiException.class,()->newsFetcher.getNewsList(urlPath,urlParams));
     }
 
     @Test
     public void nullResponse() throws Exception{
+        String urlPath="testUrlPath";
+        Map<String,String> urlParams=new LinkedHashMap<>();
+        urlParams.put("q","test");
+
         when(response.statusCode()).thenReturn(200);
         when(response.body()).thenReturn(null);
 
         when(httpClient.send(any())).thenReturn(response);
 
-        List<NewsArticle> articles=newsFetcher.getNewsList("q=test");
+        List<NewsArticle> articles=newsFetcher.getNewsList(urlPath,urlParams);
 
         assertNotNull(articles);
         assertEquals(0,articles.size());
@@ -68,12 +84,16 @@ public class NewsFetcherTest {
     @Test
     public void emptyArticlesResponse() throws Exception{
         String body="{\"status\":\"ok\",\"totalResults\":0,\"articles\":[]}";
+        String urlPath="testUrlPath";
+        Map<String,String> urlParams=new LinkedHashMap<>();
+        urlParams.put("q","test");
+
         when(response.statusCode()).thenReturn(200);
         when(response.body()).thenReturn(body);
 
         when(httpClient.send(any())).thenReturn(response);
 
-        List<NewsArticle>articles=newsFetcher.getNewsList("Q=test");
+        List<NewsArticle>articles=newsFetcher.getNewsList(urlPath,urlParams);
 
         assertNotNull(articles);
         assertEquals(0,articles.size());
@@ -82,19 +102,36 @@ public class NewsFetcherTest {
     @Test
     public void invalidJsonThrowsException() throws Exception{
         String body="{invalid json}";
+        String urlPath="testUrlPath";
+        Map<String,String> urlParams=new LinkedHashMap<>();
+        urlParams.put("q","test");
+
         when(response.statusCode()).thenReturn(200);
         when(response.body()).thenReturn(body);
 
         when(httpClient.send(any())).thenReturn(response);
 
-        assertThrows(NewsApiException.class, ()->newsFetcher.getNewsList("q=test"));
+        assertThrows(NewsApiException.class, ()->newsFetcher.getNewsList(urlPath,urlParams));
     }
 
     @Test
     public void ioExceptionIsWrapped() throws Exception{
+        String urlPath="testUrlPath";
+        Map<String,String> urlParams=new LinkedHashMap<>();
+        urlParams.put("q","test");
+
         when(httpClient.send(any())).thenThrow(new IOException("Network error"));
 
-        assertThrows(NewsApiException.class,()->newsFetcher.getNewsList("q=test"));
+        assertThrows(NewsApiException.class,()->newsFetcher.getNewsList(urlPath,urlParams));
+    }
+
+    @Test
+    public void nullUrlPath(){
+        String urlPath=null;
+        Map<String,String> urlParams=new LinkedHashMap<>();
+        urlParams.put("q","test");
+
+        assertThrows(IllegalArgumentException.class, ()->newsFetcher.getNewsList(urlPath,urlParams));
     }
 
 }

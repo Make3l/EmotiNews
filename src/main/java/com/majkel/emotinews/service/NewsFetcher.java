@@ -13,10 +13,14 @@ import javafx.beans.property.BooleanProperty;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class NewsFetcher {
 
@@ -28,13 +32,40 @@ public class NewsFetcher {
         this.apiKey=apiKey;
     }
 
+    private static String encode(String value){
+        return URLEncoder.encode(value, StandardCharsets.UTF_8).replace("+","%20");
+    }
 
-    public List<NewsArticle> getNewsList(String query){
+    private static String buildQuery(Map<String,String> params){
+        return params.entrySet().stream()
+                .filter(e->e.getKey()!=null && e.getValue()!=null && !e.getValue().isBlank())
+                .map(e->e.getKey()+"="+encode(e.getValue()))
+                .collect(Collectors.joining("&"));
+    }
+
+    private static String buildUrl(String path, Map<String,String>params){
+        if(path==null || path.isBlank())
+            throw new IllegalArgumentException("Path is mandatory in url e.g. top-headlines");
+        if(params==null || params.isEmpty())
+            throw new IllegalArgumentException("Params are mandatory in url e.g. q=\"Trump\"");
+
+        String base="https://newsapi.org/v2/";
+        String query=buildQuery(params);
+        return base+path+"?"+query;
+    }
+
+
+    public List<NewsArticle> getNewsList(String path, Map<String,String>params){
+        if(apiKey==null || apiKey.isBlank())
+            throw new NewsApiException("API key is not configured");
+
         Gson gson= new GsonBuilder().registerTypeAdapter(BooleanProperty.class,new  BooleanPropertyAdapter()).create();
         List<NewsArticle> articles = null;
+
+        String uri=buildUrl(path,params);//todo: add topic validation - q=...
         try {
             HttpRequest getRequest = HttpRequest.newBuilder()
-                    .uri(new URI("https://newsapi.org/v2/"+query+"language=en"))
+                    .uri(new URI(uri))
                     .header("X-Api-Key", apiKey)
                     .build();
             HttpResponse<String> getResponse=httpClient.send(getRequest);
