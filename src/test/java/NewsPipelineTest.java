@@ -36,19 +36,19 @@ public class NewsPipelineTest {
     public void success() throws Exception{
         List<NewsArticle>fetcherResult=new ArrayList<>(
                 Arrays.asList(new NewsArticle("Title0","Descryption0","Url0"),new NewsArticle("Title1","Descryption1","Url1")));
-        List<TextEmotion> analizerResult=new ArrayList<>(Arrays.asList(new TextEmotion("Label0",0.9),new TextEmotion("Label1",0.9)));
+        List<TextEmotion> analyzerResult=new ArrayList<>(Arrays.asList(new TextEmotion("Label0",0.9),new TextEmotion("Label1",0.9)));
 
         when(newsFetcher.getNewsList(any(),any())).thenReturn(fetcherResult);
-        when(emotionsAnalyzer.parseArticles(any())).thenReturn(analizerResult);
+        when(emotionsAnalyzer.parseArticles(any())).thenReturn(analyzerResult);
 
         List<NewsWithEmotions>pipelineResult=pipeline.loadNews();
         assertEquals(2,pipelineResult.size());
         assertEquals(fetcherResult.get(1).getTitle(),pipelineResult.get(1).getArticle().getTitle());
-        assertEquals(analizerResult.get(1).getLabel(),pipelineResult.get(1).getEmotion());
+        assertEquals(analyzerResult.get(1).getLabel(),pipelineResult.get(1).getEmotion());
     }
 
     @Test
-    public void newsFetcherReturnedEmptyTest(){
+    public void newsFetcherReturnedEmptyTest() throws Exception{
         when(newsFetcher.getNewsList(any(),any())).thenReturn(new ArrayList<>());
 
         List<NewsWithEmotions>pipelineResult=pipeline.loadNews();
@@ -116,7 +116,7 @@ public class NewsPipelineTest {
             fetcherResult.add(new NewsArticle("Title "+i,"Description "+i,"Url "+i));
 
         List<TextEmotion>analyzerResults=new ArrayList<>();
-        for(int i=0;i<20;i++)//articles are being trimmed so emotions are equals to articles trimmed
+        for(int i=0;i<20;i++)//articles are being trimmed so emotions are equal to articles trimmed
             analyzerResults.add(new TextEmotion("Emotion "+i,0.9));
 
         when(newsFetcher.getNewsList(any(),any())).thenReturn(fetcherResult);

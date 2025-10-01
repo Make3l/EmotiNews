@@ -16,7 +16,9 @@ import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.net.http.HttpTimeoutException;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -55,31 +57,34 @@ public class NewsFetcher {
     }
 
 
-    public List<NewsArticle> getNewsList(String path, Map<String,String>params){
-        if(apiKey==null || apiKey.isBlank())
+    public List<NewsArticle> getNewsList(String path, Map<String,String>params) throws HttpTimeoutException {
+        if (apiKey == null || apiKey.isBlank())
             throw new NewsApiException("API key is not configured");
 
-        Gson gson= new GsonBuilder().registerTypeAdapter(BooleanProperty.class,new  BooleanPropertyAdapter()).create();
+        Gson gson = new GsonBuilder().registerTypeAdapter(BooleanProperty.class, new BooleanPropertyAdapter()).create();
         List<NewsArticle> articles = null;
 
-        String uri=buildUrl(path,params);//todo: add topic validation - q=...
+        String uri = buildUrl(path, params);//todo: add topic validation - q=...
         try {
             HttpRequest getRequest = HttpRequest.newBuilder()
                     .uri(new URI(uri))
                     .header("X-Api-Key", apiKey)
+                    .timeout(Duration.ofSeconds(35))
                     .build();
-            HttpResponse<String> getResponse=httpClient.send(getRequest);
+            HttpResponse<String> getResponse = httpClient.send(getRequest);
 
             if (getResponse.statusCode() == 401 || getResponse.statusCode() == 403) {
                 throw new NewsApiException("Invalid or missing API key");
-            } else if(getResponse.statusCode()!=200)
-                throw new NewsApiException("NewsAPI request failed with status code "+getResponse.statusCode());
+            } else if (getResponse.statusCode() != 200)
+                throw new NewsApiException("NewsAPI request failed with status code " + getResponse.statusCode());
 
-            NewsHolder response=gson.fromJson(getResponse.body(),NewsHolder.class);
-            if(response!=null)
-                articles=response.getArticles();
+            NewsHolder response = gson.fromJson(getResponse.body(), NewsHolder.class);
+            if (response != null)
+                articles = response.getArticles();
 
-        } catch(URISyntaxException e){
+        }catch (HttpTimeoutException e){
+            throw e;
+        }catch(URISyntaxException e){
             throw new NewsApiException("Invalid API URL", e);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
