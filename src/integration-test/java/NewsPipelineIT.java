@@ -8,7 +8,6 @@ import com.majkel.emotinews.service.NewsPipeline;
 import org.junit.jupiter.api.*;
 
 import java.net.http.HttpClient;
-import java.net.http.HttpTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -33,7 +32,7 @@ public class NewsPipelineIT {//added only one test because most of the testing c
     public void setUp(){
         stubbedEmotionsAnalyzer=new EmotionsAnalyzer(new HttpClientWrapper(HttpClient.newHttpClient()),"STUB_KEY"){
             @Override
-            public List<TextEmotion> parseArticles(List<String> news) throws HttpTimeoutException {
+            public List<TextEmotion> parseArticles(List<String> news) {
                 List<TextEmotion>result=new ArrayList<>();
                 news.forEach(description->result.add(new TextEmotion("LABEL_0",0.9)));
                 return result;
