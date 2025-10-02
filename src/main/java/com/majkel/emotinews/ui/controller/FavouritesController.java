@@ -178,7 +178,7 @@ public class FavouritesController {
 
     @FXML
     private void searchFavourites(){
-        String searchedPhase= InputSanitizer.filterTopic(phraseField.getText().trim().toLowerCase());
+        String searchedPhase= InputSanitizer.filterTopic(phraseField.getText().toLowerCase());
         if(searchedPhase.isEmpty()){
             display(favAllList);
             return;

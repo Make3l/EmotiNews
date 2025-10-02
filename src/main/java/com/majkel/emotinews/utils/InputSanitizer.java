@@ -5,6 +5,9 @@ public class InputSanitizer {
     private static final int MAX_CODEPOINTS=128;
 
     public static String filterTopic(String topic){
+        if(topic==null || topic.isBlank())
+            return "";
+
         String result=topic.trim();
 
         result=result.replaceAll("\\s+"," ");//replacing multiple white characters with a single space
