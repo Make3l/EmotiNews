@@ -64,7 +64,7 @@ public class NewsFetcher {
         Gson gson = new GsonBuilder().registerTypeAdapter(BooleanProperty.class, new BooleanPropertyAdapter()).create();
         List<NewsArticle> articles = null;
 
-        String uri = buildUrl(path, params);//todo: add topic validation - q=...
+        String uri = buildUrl(path, params);
         try {
             HttpRequest getRequest = HttpRequest.newBuilder()
                     .uri(new URI(uri))

@@ -9,6 +9,7 @@ import com.majkel.emotinews.model.NewsWithEmotions;
 import com.majkel.emotinews.service.EmotionsAnalyzer;
 import com.majkel.emotinews.service.NewsFetcher;
 import com.majkel.emotinews.service.NewsPipeline;
+import com.majkel.emotinews.utils.InputSanitizer;
 import javafx.animation.PauseTransition;
 import javafx.application.HostServices;
 import javafx.application.Platform;
@@ -109,8 +110,6 @@ public class MainViewController {
             loadingLabel.managedProperty().unbind();
         });
         new Thread(task).start();
-
-
 
 
         listViewObj.setCellFactory(param-> new ListCell<>(){
@@ -222,7 +221,10 @@ public class MainViewController {
     }
     @FXML
     public void searchTopic(){
-        if(topicField.getText().isEmpty())
+
+        String sanitizedTopic=InputSanitizer.filterTopic(topicField.getText());
+
+        if(sanitizedTopic.isEmpty())
             return;
 
         if(newsPipelineTask!=null && newsPipelineTask.isRunning()){
@@ -243,8 +245,10 @@ public class MainViewController {
 
         newsPipelineTask=new Task<>() {
             @Override
-            protected List<NewsWithEmotions> call() throws Exception{
-                return new NewsPipeline(new NewsFetcher(new HttpClientWrapper(HttpClient.newHttpClient()),ConfigLoader.getValue("api.news.key")),new EmotionsAnalyzer(new HttpClientWrapper(HttpClient.newHttpClient()), ConfigLoader.getValue("api.huggingface.emotions.analizer"))).loadNews(topicField.getText());
+            protected List<NewsWithEmotions> call(){
+                return new NewsPipeline(
+                        new NewsFetcher(new HttpClientWrapper(HttpClient.newHttpClient()), ConfigLoader.getValue("api.news.key")),
+                        new EmotionsAnalyzer(new HttpClientWrapper(HttpClient.newHttpClient()), ConfigLoader.getValue("api.huggingface.emotions.analizer"))).loadNews(sanitizedTopic);
             }
         };
 

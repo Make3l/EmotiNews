@@ -1,9 +1,9 @@
 package com.majkel.emotinews.ui.controller;
 
 import com.majkel.emotinews.config.ConfigLoader;
-import com.majkel.emotinews.model.NewsArticle;
 import com.majkel.emotinews.model.NewsWithEmotions;
 import com.majkel.emotinews.storage.JSONStorage;
+import com.majkel.emotinews.utils.InputSanitizer;
 import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -15,8 +15,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.ObjectInputFilter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -180,7 +178,7 @@ public class FavouritesController {
 
     @FXML
     private void searchFavourites(){
-        String searchedPhase=phraseField.getText().trim().toLowerCase();
+        String searchedPhase= InputSanitizer.filterTopic(phraseField.getText().trim().toLowerCase());
         if(searchedPhase.isEmpty()){
             display(favAllList);
             return;
