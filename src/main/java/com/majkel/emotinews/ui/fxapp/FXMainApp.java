@@ -20,6 +20,11 @@ public class FXMainApp extends Application {
         RootController rootController=loader.getController();
         rootController.setHostServices(getHostServices());
 
+        primaryStage.setWidth(750);
+        primaryStage.setHeight(600);
+
+        primaryStage.setMinWidth(600);
+        primaryStage.setMinHeight(400);
         primaryStage.setTitle("EmotiNews");
         primaryStage.setScene(scene);
         primaryStage.show();

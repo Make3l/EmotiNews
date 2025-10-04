@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox managed="false" minWidth="110" spacing="10" styleClass="details-box" stylesheets="@../style/style.css" visible="flase" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+    <Label fx:id="title" styleClass="news-title" wrapText="true" />
+    <Text fx:id="description" styleClass="news-description" />
+    <Hyperlink fx:id="link" styleClass="news-link" text="Click to read more" />
+</VBox>

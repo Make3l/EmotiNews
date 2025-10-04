@@ -7,6 +7,9 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.majkel.emotinews.ui.controller.RootController">
 
-    <TabPane fx:id="rootTabPane" layoutX="0" layoutY="0" prefWidth="800" prefHeight="600" />
-
+    <TabPane fx:id="rootTabPane"
+             AnchorPane.topAnchor="0"
+             AnchorPane.bottomAnchor="0"
+             AnchorPane.leftAnchor="0"
+             AnchorPane.rightAnchor="0"/>
 </AnchorPane>
