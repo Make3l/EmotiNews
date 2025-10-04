@@ -290,7 +290,7 @@ public class MainViewController {
         this.hostServices=hostServices;
     }
 
-    private void syncFavouritesWithAllNews(){//it swaps objects in order to connect swapped news with this in favourites
+    private void syncFavouritesWithAllNews(){//it swaps objects to connect swapped news with these in favourites
         if(favourites==null)
             return;
         Map<NewsWithEmotions,Integer> map=new HashMap<>();
