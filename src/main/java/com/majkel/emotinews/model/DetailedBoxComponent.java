@@ -22,10 +22,15 @@ public class DetailedBoxComponent extends VBox {
     private void loadFXML() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/majkel/emotinews/ui/view/DetailedBox.fxml"));
         loader.setController(this);
-
         try {
             VBox root = loader.load();
             this.getChildren().setAll(root.getChildren());
+            // copy styleClassy i stylesheet
+            this.getStyleClass().addAll(root.getStyleClass());
+            this.getStylesheets().addAll(root.getStylesheets());
+            // copy padding/minWidth
+            this.setPadding(root.getPadding());
+            this.setMinWidth(root.getMinWidth());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

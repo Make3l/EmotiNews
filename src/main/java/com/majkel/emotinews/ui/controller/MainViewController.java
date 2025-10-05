@@ -17,7 +17,6 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.net.http.HttpClient;
@@ -50,15 +49,11 @@ public class MainViewController {
     @FXML
     private void initialize(){
         detailedBox=new DetailedBoxComponent();
-        detailedBox.managedProperty().bind(detailedBox.visibleProperty());//todo look at the text padding
+        detailedBox.managedProperty().bind(detailedBox.visibleProperty());
         detailedBox.setVisible(false);
         detailedBox.getDescription().wrappingWidthProperty().bind(detailedBox.widthProperty().subtract(50));
         loadingSpinner.managedProperty().bind(loadingSpinner.visibleProperty());
         loadingLabel.managedProperty().bind(loadingLabel.visibleProperty());
-
-
-
-        //VBox.setVgrow(listViewObj, Priority.ALWAYS);
 
         allNews=new ArrayList<>();
         allNews.add(new NewsWithEmotions("LABEL_1", NewsArticle.createDefaultNews()));
@@ -173,25 +168,20 @@ public class MainViewController {
         if(detailedBox.isVisible())
             return;
 
-        detailedBox.setVisible(true);
-
-        if(rootSplit==null)
-            System.out.println("JEST NULL?");
-
-
         if (rootSplit != null && !rootSplit.getItems().contains(detailedBox))
             rootSplit.getItems().add(detailedBox);
+
+        detailedBox.setVisible(true);
     }
 
     public void hideDetailedBox(){
         if(!detailedBox.isVisible())
             return;
 
-        detailedBox.setVisible(false);
         if (rootSplit != null)
             rootSplit.getItems().remove(detailedBox);
 
-            //rootSplit.setDividerPositions(1.0);
+        detailedBox.setVisible(false);
     }
 
 
