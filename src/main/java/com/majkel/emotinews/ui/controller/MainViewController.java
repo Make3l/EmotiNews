@@ -2,10 +2,7 @@ package com.majkel.emotinews.ui.controller;
 
 import com.majkel.emotinews.adapter.HttpClientWrapper;
 import com.majkel.emotinews.config.ConfigLoader;
-import com.majkel.emotinews.model.Callback;
-import com.majkel.emotinews.model.CallbackFav;
-import com.majkel.emotinews.model.NewsArticle;
-import com.majkel.emotinews.model.NewsWithEmotions;
+import com.majkel.emotinews.model.*;
 import com.majkel.emotinews.service.EmotionsAnalyzer;
 import com.majkel.emotinews.service.NewsFetcher;
 import com.majkel.emotinews.service.NewsPipeline;
@@ -20,8 +17,6 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.net.http.HttpClient;
@@ -31,50 +26,34 @@ import java.util.function.Consumer;
 public class MainViewController {
     @FXML
     private ListView<NewsWithEmotions> listViewObj;
-
     private List<NewsWithEmotions> allNews;
-
     private HostServices hostServices;
-
     private NewsWithEmotions lastSelectedNews;
-
     @FXML
     private TextField topicField;
-
     @FXML
-    private Hyperlink link;
-
-    @FXML
-    private Label title;
-
-    @FXML
-    private Text description;
-
-    @FXML
-    private VBox detailedBox;
-
+    private SplitPane rootSplit;
     @FXML
     private Button searchButton;
-
     @FXML
     private ProgressIndicator loadingSpinner;
-
     @FXML
     private Label loadingLabel;
-
     private String currentTopic="technology";//current topic, default=technology
-
     private Consumer<Callback> callbackConsumer;
-
     private Consumer<CallbackFav> callbackFavNews;
-
     private List<NewsWithEmotions> favourites=null;
-
     private Task<List<NewsWithEmotions>> newsPipelineTask;
-
+    private DetailedBoxComponent detailedBox;
 
     @FXML
     private void initialize(){
+        detailedBox=new DetailedBoxComponent();
+        detailedBox.managedProperty().bind(detailedBox.visibleProperty());
+        detailedBox.getDescription().wrappingWidthProperty().bind(detailedBox.widthProperty().subtract(20));
+        loadingSpinner.managedProperty().bind(loadingSpinner.visibleProperty());
+        loadingLabel.managedProperty().bind(loadingLabel.visibleProperty());
+
         allNews=new ArrayList<>();
         allNews.add(new NewsWithEmotions("LABEL_1", NewsArticle.createDefaultNews()));
         Platform.runLater(()->display(allNews));
@@ -87,27 +66,22 @@ public class MainViewController {
             }
         };
         loadingSpinner.visibleProperty().bind(task.runningProperty());
-        loadingSpinner.managedProperty().bind(task.runningProperty());
         loadingLabel.visibleProperty().bind(task.runningProperty());
-        loadingLabel.managedProperty().bind(task.runningProperty());
         task.setOnSucceeded(e->{
             allNews=task.getValue();
             Platform.runLater(()->callbackConsumer.accept(new Callback(currentTopic,allNews)));
             syncFavouritesWithAllNews();
             display(allNews);
             loadingSpinner.visibleProperty().unbind();
-            loadingSpinner.managedProperty().unbind();
             loadingLabel.visibleProperty().unbind();
-            loadingLabel.managedProperty().unbind();
         });
         task.setOnFailed(e->{
             Throwable ex = task.getException();
+
             System.err.println("Failed at newsPipelineTask: " + ex.getMessage());
             ex.printStackTrace();
             loadingSpinner.visibleProperty().unbind();
-            loadingSpinner.managedProperty().unbind();
             loadingLabel.visibleProperty().unbind();
-            loadingLabel.managedProperty().unbind();
         });
         new Thread(task).start();
 
@@ -160,24 +134,26 @@ public class MainViewController {
             if(selected!=null)
             {
                 if(selected.equals(lastSelectedNews)){
-                    title.setText("");
-                    description.setText("");
-                    detailedBox.setVisible(false);
-                    detailedBox.setManaged(false);
+                    detailedBox.getTitle().setText("");
+                    detailedBox.getDescription().setText("");
+                    detailedBox.getLink().setVisible(false);
+                    hideDetailedBox();
                     lastSelectedNews = null;
                 }
                 else{
-                    detailedBox.setVisible(true);
-                    detailedBox.setManaged(true);
-                    title.setText(selected.getArticle().getTitle());
-                    description.setText(selected.getArticle().getDescription());
+                    showDetailedBox();
+                    detailedBox.getTitle().setText(selected.getArticle().getTitle());
+                    detailedBox.getDescription().setText(selected.getArticle().getDescription());
                     String currentURL=selected.getArticle().getUrl();
                     if(currentURL!=null && !currentURL.isEmpty())
-                        link.setOnAction(event->hostServices.showDocument(currentURL));
+                    {
+                        detailedBox.getLink().setVisible(true);
+                        detailedBox.getLink().setOnAction(event->hostServices.showDocument(currentURL));
+                    }
                     else
-                        link.setVisible(false);
+                        detailedBox.getLink().setVisible(false);
 
-                    lastSelectedNews =selected;
+                    lastSelectedNews = selected;
                 }
             }
         });
@@ -185,6 +161,26 @@ public class MainViewController {
         Platform.runLater(()->{
             callbackConsumer.accept(new Callback(currentTopic,allNews));
         });
+    }
+
+    private void showDetailedBox(){
+        if(detailedBox.isVisible())
+            return;
+
+        if (rootSplit != null && !rootSplit.getItems().contains(detailedBox))
+            rootSplit.getItems().add(detailedBox);
+
+        detailedBox.setVisible(true);
+    }
+
+    private void hideDetailedBox(){
+        if(!detailedBox.isVisible())
+            return;
+
+        if (rootSplit != null)
+            rootSplit.getItems().remove(detailedBox);
+
+        detailedBox.setVisible(false);
     }
 
 
@@ -253,10 +249,8 @@ public class MainViewController {
         };
 
         loadingSpinner.visibleProperty().bind(newsPipelineTask.runningProperty());
-        loadingSpinner.managedProperty().bind(newsPipelineTask.runningProperty());
         searchButton.disableProperty().bind(newsPipelineTask.runningProperty());
         loadingLabel.visibleProperty().bind(newsPipelineTask.runningProperty());
-        loadingLabel.managedProperty().bind(newsPipelineTask.runningProperty());
 
         newsPipelineTask.setOnSucceeded(e->{
             allNews=newsPipelineTask.getValue();
@@ -267,10 +261,8 @@ public class MainViewController {
             topicField.clear();
             newsPipelineTask=null;
             loadingSpinner.visibleProperty().unbind();
-            loadingSpinner.managedProperty().unbind();
             searchButton.disableProperty().unbind();
             loadingLabel.visibleProperty().unbind();
-            loadingLabel.managedProperty().unbind();
         });
         newsPipelineTask.setOnFailed(e->{
             Throwable ex = newsPipelineTask.getException();
@@ -278,10 +270,8 @@ public class MainViewController {
             ex.printStackTrace();
             newsPipelineTask=null;
             loadingSpinner.visibleProperty().unbind();
-            loadingSpinner.managedProperty().unbind();
             searchButton.disableProperty().unbind();
             loadingLabel.visibleProperty().unbind();
-            loadingLabel.managedProperty().unbind();
         });
         new Thread(newsPipelineTask).start();
     }
@@ -290,7 +280,7 @@ public class MainViewController {
         this.hostServices=hostServices;
     }
 
-    private void syncFavouritesWithAllNews(){//it swaps objects in order to connect swapped news with this in favourites
+    private void syncFavouritesWithAllNews(){//it swaps objects to connect swapped news with these in favourites
         if(favourites==null)
             return;
         Map<NewsWithEmotions,Integer> map=new HashMap<>();

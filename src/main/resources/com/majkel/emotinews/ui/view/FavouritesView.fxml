@@ -3,11 +3,15 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import javafx.scene.text.Text?>
-<HBox xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.majkel.emotinews.ui.controller.FavouritesController"
-      alignment="TOP_LEFT" prefWidth="600" spacing="11" stylesheets="@../style/favStyle.css">
-    <VBox alignment="CENTER" spacing="11" styleClass="left-panel" HBox.hgrow="ALWAYS">
+<SplitPane xmlns="http://javafx.com/javafx/17.0.12"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.majkel.emotinews.ui.controller.FavouritesController"
+           stylesheets="@../style/favStyle.css"
+           dividerPositions="0.5"
+           fx:id="rootSplit">
+
+
+    <VBox alignment="CENTER" spacing="11" styleClass="left-panel" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" minWidth="300">
 
         <Label alignment="CENTER" text="Favourite news" styleClass="main-label"/>
         <HBox alignment="CENTER" spacing="10">
@@ -22,13 +26,9 @@
             <Button fx:id="searchButton" onAction="#searchFavourites" styleClass="search-button" text="Search" />
         </HBox>
 
-        <ListView fx:id="favList" prefWidth="400" styleClass="article-list"/>
+        <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS">
+            <ListView fx:id="favList" styleClass="article-list"/>
+        </ScrollPane>
 
     </VBox>
-
-    <VBox fx:id="detailedBox" managed="false" spacing="10" styleClass="details-box" visible="false">
-        <Label fx:id="newsTitle" maxWidth="-Infinity" styleClass="news-title" wrapText="true" />
-        <Text fx:id="newsDescription" wrappingWidth="330" styleClass="news-description" />
-        <Hyperlink fx:id="newsLink" styleClass="news-link" text="Click to read more" />
-    </VBox>
-</HBox>
+</SplitPane>

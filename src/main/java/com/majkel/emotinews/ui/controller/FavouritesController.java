@@ -1,6 +1,7 @@
 package com.majkel.emotinews.ui.controller;
 
 import com.majkel.emotinews.config.ConfigLoader;
+import com.majkel.emotinews.model.DetailedBoxComponent;
 import com.majkel.emotinews.model.NewsWithEmotions;
 import com.majkel.emotinews.storage.JSONStorage;
 import com.majkel.emotinews.utils.InputSanitizer;
@@ -11,8 +12,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -35,17 +34,7 @@ public class FavouritesController {
     @FXML
     private ListView<NewsWithEmotions> favList;
 
-    @FXML
-    private VBox detailedBox;
-
-    @FXML
-    private Label newsTitle;
-
-    @FXML
-    private Text newsDescription;
-
-    @FXML
-    private Hyperlink newsLink;
+    private DetailedBoxComponent detailedBox;
 
     @FXML
     private Button searchButton;
@@ -54,7 +43,14 @@ public class FavouritesController {
     private TextField phraseField;
 
     @FXML
+    private SplitPane rootSplit;
+
+    @FXML
     public void initialize(){
+        detailedBox=new DetailedBoxComponent();
+        detailedBox.managedProperty().bind(detailedBox.visibleProperty());
+        detailedBox.getDescription().wrappingWidthProperty().bind(detailedBox.widthProperty().subtract(20));
+
         favAllList=JSONStorage.safeLoad(new File(storageFilePath));
 
         Platform.runLater(()->{callbackFavList.accept(favAllList);});
@@ -81,9 +77,8 @@ public class FavouritesController {
                         Platform.runLater(()->selected.getArticle().changeFavourite());
                         if(selected.equals(lastSelectedNews)) {
                             newsTitle.setText("");
-                            newsDescription.setText("");
-                            detailedBox.setManaged(false);
-                            detailedBox.setVisible(false);
+                            detailedBox.getDescription().setText("");
+                            hideDetailedBox();
                             lastSelectedNews = null;
                         }
                     }
@@ -113,23 +108,46 @@ public class FavouritesController {
             if(selected!=null)
             {
                 if(selected.equals(lastSelectedNews)){
-                    newsTitle.setText("");
-                    newsDescription.setText("");
-                    detailedBox.setManaged(false);
-                    detailedBox.setVisible(false);
+                    detailedBox.getTitle().setText("");
+                    detailedBox.getDescription().setText("");
+                    hideDetailedBox();
                     lastSelectedNews=null;
                 }else{
-                    newsTitle.setText(selected.getArticle().getTitle());
-                    newsDescription.setText(selected.getArticle().getDescription());
-                    newsLink.setOnAction(ns->{hostServices.showDocument(selected.getArticle().getUrl());});
-                    detailedBox.setManaged(true);
-                    detailedBox.setVisible(true);
+                    showDetailedBox();
+                    detailedBox.getTitle().setText(selected.getArticle().getTitle());
+                    detailedBox.getDescription().setText(selected.getArticle().getDescription());
+                    if(selected.getArticle().getUrl()!=null && !selected.getArticle().getUrl().isBlank())
+                        detailedBox.getLink().setOnAction(ns->{hostServices.showDocument(selected.getArticle().getUrl());});
+                    else
+                        detailedBox.getLink().setVisible(false);
+
                     lastSelectedNews=selected;
                 }
             }
 
         });
 
+    }
+
+    private void showDetailedBox(){
+        if(detailedBox.isVisible())
+            return;
+
+        if (rootSplit != null && !rootSplit.getItems().contains(detailedBox))
+            rootSplit.getItems().add(detailedBox);
+
+        detailedBox.setVisible(true);
+    }
+
+    private void hideDetailedBox(){
+        if(!detailedBox.isVisible())
+            return;
+
+        if (rootSplit != null)
+            rootSplit.getItems().remove(detailedBox);
+
+
+        detailedBox.setVisible(false);
     }
 
     public void addFavourite(NewsWithEmotions news){
