@@ -33,7 +33,7 @@ public class DetailedBoxComponent extends VBox {
             this.setMinWidth(root.getMinWidth());
 
             this.setVisible(root.isVisible());
-            this.setManaged(isManaged());
+            this.setManaged(root.isManaged());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
