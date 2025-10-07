@@ -10,7 +10,6 @@
            dividerPositions="0.5"
            fx:id="rootSplit">
 
-    <items>
         <VBox alignment="CENTER" spacing="11" styleClass="left-panel" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" minWidth="300">
             <HBox alignment="CENTER" spacing="10" styleClass="filter-box">
                 <Button onAction="#handleAll" styleClass="filter-button" text="All" />
@@ -35,5 +34,4 @@
                 <ListView fx:id="listViewObj" styleClass="article-list"/>
             </ScrollPane>
         </VBox>
-    </items>
 </SplitPane>

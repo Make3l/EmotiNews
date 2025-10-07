@@ -31,6 +31,9 @@ public class DetailedBoxComponent extends VBox {
             // copy padding/minWidth
             this.setPadding(root.getPadding());
             this.setMinWidth(root.getMinWidth());
+
+            this.setVisible(root.isVisible());
+            this.setManaged(isManaged());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

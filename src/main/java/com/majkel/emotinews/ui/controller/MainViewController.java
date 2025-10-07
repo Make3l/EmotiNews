@@ -50,8 +50,7 @@ public class MainViewController {
     private void initialize(){
         detailedBox=new DetailedBoxComponent();
         detailedBox.managedProperty().bind(detailedBox.visibleProperty());
-        detailedBox.setVisible(false);
-        detailedBox.getDescription().wrappingWidthProperty().bind(detailedBox.widthProperty().subtract(50));
+        detailedBox.getDescription().wrappingWidthProperty().bind(detailedBox.widthProperty().subtract(20));
         loadingSpinner.managedProperty().bind(loadingSpinner.visibleProperty());
         loadingLabel.managedProperty().bind(loadingLabel.visibleProperty());
 
@@ -174,7 +173,7 @@ public class MainViewController {
         detailedBox.setVisible(true);
     }
 
-    public void hideDetailedBox(){
+    private void hideDetailedBox(){
         if(!detailedBox.isVisible())
             return;
 
